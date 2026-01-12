@@ -73,7 +73,8 @@
         word-wrap: break-word;
         overflow-wrap: break-word;
         overflow-y: auto;
-        max-height: 300px;
+        max-height: none;
+        min-height: 120px;
       }
       .level-badge {
         display: inline-block;
@@ -103,7 +104,7 @@
     /* 全局样式 */
     body {
       background-color: #F5EFE0;
-      background-image: url('background.png');
+      background-image: url('background.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -171,7 +172,7 @@
     }
     
     .scroll.active {
-      max-height: 600px;
+      max-height: 1200px;
     }
     
     .scroll-top, .scroll-bottom {
@@ -185,7 +186,37 @@
     }
     
     .scroll-content {
-      padding: 20px;
+      padding: 15px;
+    }
+    
+    /* 移动端优化 */
+    @media (max-width: 768px) {
+      .scroll-content {
+        padding: 10px;
+      }
+      
+      .xianxia-card {
+        padding: 12px !important;
+        margin-bottom: 10px;
+      }
+      
+      h3.text-xl {
+        font-size: 1.25rem;
+      }
+      
+      h4.text-xl {
+        font-size: 1.1rem;
+      }
+      
+      .level-badge {
+        padding: 1px 6px;
+        font-size: 0.8rem;
+      }
+      
+      p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+      }
     }
     
     /* 按钮样式 */
@@ -415,7 +446,7 @@
     
     <!-- 页脚 -->
     <footer class="mt-8 text-center text-xianxia-accent">
-      <p>一骰问天机，一骰逆天命 © 2025</p>
+      <p>一骰问天机，一骰逆天命</p>
     </footer>
   </div>
   
@@ -696,8 +727,7 @@
       
       if (talentLevel > curseLevel) {
         // 天赋等级大于天谴等级
-        const levelDiff = talentLevel - curseLevel;
-        effectIndex = 15 + Math.min(levelDiff - 1, 4);
+        effectIndex = 16; // "高等级的天赋与低等级的天谴，这样的组合让你在修炼之路上占尽优势。"
         
         // 添加天赋主导的动画效果
         talentCard.classList.add('talent-dominant');
@@ -706,8 +736,7 @@
         
       } else if (curseLevel > talentLevel) {
         // 天谴等级大于天赋等级
-        const levelDiff = curseLevel - talentLevel;
-        effectIndex = 15 + Math.min(levelDiff - 1, 4);
+        effectIndex = 17; // "低等级的天赋与高等级的天谴，这样的组合让你的修炼之路充满了挑战，但也更加锻炼人的意志。"
         
         // 添加天谴主导的动画效果
         curseCard.classList.add('curse-dominant');
