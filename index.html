@@ -1,0 +1,967 @@
+<html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>修仙天赋天谴抽取</title>
+  <!-- Tailwind CSS v3 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- 统一的 Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            // 等次颜色
+            'level-common': '#9E9E9E', // 凡级 - 灰色
+            'level-human': '#4CAF50',  // 人级 - 绿色
+            'level-earth': '#2196F3',  // 地级 - 蓝色
+            'level-heaven': '#FF9800', // 天级 - 橙色
+            'level-immortal': '#F44336', // 仙级 - 红色
+            
+            // 主题颜色
+            'xianxia-bg': '#F5EFE0',   // 古卷米黄
+            'xianxia-text': '#5D4037', // 古卷文字色
+            'xianxia-accent': '#8B4513', // 古铜色
+          },
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans SC', 'sans-serif'],
+          },
+          animation: {
+            'spin-slow': 'spin 3s linear infinite',
+            'float': 'float 3s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'glow': 'glow 2s ease-in-out infinite alternate',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            glow: {
+              '0%': { boxShadow: '0 0 5px rgba(255, 255, 255, 0.5)' },
+              '100%': { boxShadow: '0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      .text-shadow-lg {
+        text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .xianxia-border {
+        border: 2px solid #8B4513;
+        box-shadow: 0 0 10px rgba(139, 69, 19, 0.3);
+      }
+      .xianxia-card {
+        background-color: rgba(245, 239, 224, 0.9);
+        border: 2px solid #8B4513;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(139, 69, 19, 0.2);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        overflow-y: auto;
+        max-height: 300px;
+      }
+      .level-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-weight: bold;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+      }
+      .scroll-reveal {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 1s ease-in-out;
+      }
+      .scroll-reveal.active {
+        max-height: 500px;
+      }
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        opacity: 0.8;
+      }
+    }
+  </style>
+  <style>
+    /* 全局样式 */
+    body {
+      background-color: #F5EFE0;
+      background-image: url('background.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #5D4037;
+      font-family: 'Inter', 'Noto Sans SC', sans-serif;
+      overflow-x: hidden;
+    }
+    
+    /* 转盘样式 */
+    .wheel-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+    }
+    
+    .wheel {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      position: relative;
+      transition: transform 5s cubic-bezier(0.1, 0.05, 0.15, 1);
+      transform: rotate(0deg);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      background-image: url('wheel.png');
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .wheel-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 40px;
+      height: 40px;
+      background-color: #8B4513;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    
+    .wheel-pointer {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 30px solid #8B4513;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+    
+    /* 卷轴样式 */
+    .scroll {
+      position: relative;
+      background-color: #F5EFE0;
+      border: 2px solid #8B4513;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 1s ease-in-out;
+    }
+    
+    .scroll.active {
+      max-height: 600px;
+    }
+    
+    .scroll-top, .scroll-bottom {
+      height: 30px;
+      background-color: #8B4513;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #F5EFE0;
+      font-weight: bold;
+    }
+    
+    .scroll-content {
+      padding: 20px;
+    }
+    
+    /* 按钮样式 */
+    .xianxia-btn {
+      position: relative;
+      background-color: #8B4513;
+      color: #F5EFE0;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 0 #5D4037;
+      overflow: hidden;
+    }
+    
+    .xianxia-btn:hover {
+      background-color: #A0522D;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #5D4037;
+    }
+    
+    .xianxia-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #5D4037;
+    }
+    
+    .xianxia-btn:disabled {
+      background-color: #BDBDBD;
+      box-shadow: 0 4px 0 #9E9E9E;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    /* 遮罩层 */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* 动画效果 */
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+    
+    @keyframes glow {
+      0% {
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+      }
+      100% {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6);
+      }
+    }
+    
+    /* 天赋大于天谴的动画 */
+    @keyframes talentDominant {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(76, 175, 80, 0.3);
+      }
+      50% {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 0 30px rgba(76, 175, 80, 0.6);
+      }
+    }
+    
+    /* 天谴大于天赋的动画 */
+    @keyframes curseDominant {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(244, 67, 54, 0.3);
+      }
+      50% {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 0 30px rgba(244, 67, 54, 0.6);
+      }
+    }
+    
+    /* 两者平衡的动画 */
+    @keyframes balanced {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(33, 150, 243, 0.3);
+      }
+      50% {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 0 30px rgba(33, 150, 243, 0.6);
+      }
+    }
+    
+    .talent-dominant {
+      animation: talentDominant 3s ease-in-out infinite;
+    }
+    
+    .curse-dominant {
+      animation: curseDominant 3s ease-in-out infinite;
+    }
+    
+    .balanced-animation {
+      animation: balanced 4s ease-in-out infinite;
+    }
+    
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .pulse-animation {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .glow-animation {
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    /* 粒子效果 */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <!-- 页面容器 -->
+  <div class="container mx-auto px-4 py-8 flex-grow flex flex-col">
+    <!-- 标题区域 -->
+    <header class="text-center mb-8">
+      <h1 class="text-4xl md:text-5xl font-bold text-xianxia-text mb-2 text-shadow-lg">逆命仙途天赋天谴抽取</h1>
+      <p class="text-xl text-xianxia-accent">逆天改命，仙道茫茫</p>
+    </header>
+    
+    <!-- 主要内容区域 -->
+    <main class="flex-grow flex flex-col items-center justify-center">
+      <!-- 转盘区域 -->
+      <div class="mb-8 text-center">
+        <div id="modeIndicator" class="text-2xl font-bold mb-4 text-xianxia-accent">
+          <span id="currentMode">天赋抽取</span>
+        </div>
+        
+        <div class="wheel-container">
+          <div class="wheel-pointer"></div>
+          <div id="wheel" class="wheel"></div>
+          <div class="wheel-center"></div>
+        </div>
+        
+        <div class="mt-8">
+          <button id="drawBtn" class="xianxia-btn text-lg px-8 py-3">
+            开始抽取
+          </button>
+          <button id="resetBtn" class="xianxia-btn text-lg px-8 py-3 ml-4" style="display: none;">
+            重新抽取
+          </button>
+        </div>
+      </div>
+      
+      <!-- 结果展示区域 -->
+      <div id="resultArea" class="w-full max-w-3xl mx-auto" style="display: none;">
+        <div class="scroll" id="scroll">
+          <div class="scroll-top">
+            <i class="fa fa-book mr-2"></i>抽取结果
+          </div>
+          <div class="scroll-content">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- 天赋结果 -->
+              <div id="talentResult" class="xianxia-card p-4 rounded-lg">
+                <h3 class="text-xl font-bold mb-2">天赋</h3>
+                <div id="talentInfo" class="space-y-2">
+                  <!-- 天赋信息将在这里动态生成 -->
+                </div>
+              </div>
+              
+              <!-- 天谴结果 -->
+              <div id="curseResult" class="xianxia-card p-4 rounded-lg">
+                <h3 class="text-xl font-bold mb-2">天谴</h3>
+                <div id="curseInfo" class="space-y-2">
+                  <!-- 天谴信息将在这里动态生成 -->
+                </div>
+              </div>
+            </div>
+            
+            <!-- 组合效果 -->
+            <div class="mt-6 xianxia-card p-4 rounded-lg">
+              <h3 class="text-xl font-bold mb-2">组合效果</h3>
+              <div id="combinationEffect" class="italic">
+                <!-- 组合效果将在这里动态生成 -->
+              </div>
+            </div>
+          </div>
+          <div class="scroll-bottom">
+            <i class="fa fa-seal mr-2"></i>命数已定
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <!-- 页脚 -->
+    <footer class="mt-8 text-center text-xianxia-accent">
+      <p>一骰问天机，一骰逆天命 © 2025</p>
+    </footer>
+  </div>
+  
+  <!-- 遮罩层 -->
+  <div id="overlay" class="overlay">
+    <div class="text-center text-white">
+      <div id="overlayText" class="text-3xl font-bold mb-4"></div>
+      <div class="pulse-animation">
+        <i class="fa fa-spinner fa-spin fa-3x"></i>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 等次数据
+    const levels = [
+      { name: '凡', color: 'level-common', icon: '⚪' },
+      { name: '人', color: 'level-human', icon: '🟢' },
+      { name: '地', color: 'level-earth', icon: '🔵' },
+      { name: '天', color: 'level-heaven', icon: '🟠' },
+      { name: '仙', color: 'level-immortal', icon: '🔴' }
+    ];
+    
+    // 天赋数据
+    const talents = [
+      // 凡级天赋
+      { id: 1, name: '灵囊妙法', level: 0, description: '每逢历练伊始，行囊中自生一缘法小物，助渡此程。' },
+      { id: 2, name: '造化手', level: 0, description: '捻木成器，点铁通灵，凡涉机巧锻铸、百工制物之事，自有道韵随指，所有工具制作相关上的检定+1。' },
+      { id: 3, name: '无垢之体', level: 0, description: '自幼百病不侵，坠崖落石亦如常，跟仙躯有关的检定时+1。' },
+      { id: 4, name: '坐忘尘嚣', level: 0, description: '万般毁誉过灵台而不留痕，诸相诳语皆如清风拂镜，在与他人交流中进行对抗检定时+1。' },
+      { id: 5, name: '灵枢通明', level: 0, description: '气随念转，意动则周天流转无滞，运用灵气驱动奇术时检定+1。' },
+      { id: 6, name: '十方魂鼎', level: 0, description: '生而魂光盈室，神完若成人；及冠则三魂凝实，七魄如柱，在进行魂魄对抗时检定+1。' },
+      { id: 7, name: '磐骨罡躯', level: 0, description: '筋如蛟索，骨若精钢，在进行力量对抗时检定+1。' },
+      { id: 8, name: '浩然正气', level: 0, description: '性秉阳和，神含正气，言出如金石振玉。凡遇良善仁德之士，语带天罡，你在说服善良之人的检定中+1。' },
+      { id: 9, name: '明心见性', level: 0, description: '浮云过眼，万劫成灰。纵逢九幽噬骨、红尘炼心之厄，灵台长明不晦，道心自守。你道心相关检定难度-1。' },
+      
+      // 人级天赋
+      { id: 10, name: '福灵心至', level: 1, description: '每逢劫起云涌、因果初结之时。天机垂顾一缕。每次开团时你获得1个额外福缘点。' },
+      { id: 11, name: '草木通心', level: 1, description: '可聆百木低语，感花草幽情。你可与普通的花草树木进行简单沟通，感知它们近期情绪。' },
+      { id: 12, name: '神农脉承', level: 1, description: '幼随亲履千峰，识得百草灵晦。你在跟草药有关的检定中具有优势，游戏开始时和每次短休后，你可以获得一枚对应你等阶的丹药。' },
+      { id: 13, name: '通宝灵犀', level: 1, description: '家承累世商脉，万贯灵韵汇于双目。你在非特殊情况下，可随意参与商会与拍卖，交易时可以看出商家是否偷工减料或有所隐藏。' },
+      { id: 14, name: '妙辩天音', level: 1, description: '舌绽莲华，言携道韵。凡论道说理、交涉劝化之时，语出自有清正灵机绕耳，使人闻之易信，与他人交谈需要检定时你具有优势。' },
+      { id: 15, name: '罗刹怒相', level: 1, description: '生就豹目环睛，煞气盈面，瞪视如寒锋慑魂。你每次冲突中第一次对敌人的检定必定成功(非大成功/大失败时骰子当作双6,但不视为大成功)' },
+      { id: 16, name: '道心坚定', level: 1, description: '灵台自锁菩提镜，万相纷纭不染尘。你的道心检定获得优势。' },
+      { id: 17, name: '玲珑通明', level: 1, description: '七窍澄澈，和气盈怀，如沐春风拂玉树。对你无恶意的人见到你会产生好感。' },
+      
+      // 地级天赋
+      { id: 18, name: '灵犀指踪', level: 2, description: '可于天地万物间落一缕心印灵痕，唯汝目可视。你可以在任意地方留下一个只有你能看见的灵力标记，在相同时空中能感知其大致方向。' },
+      { id: 19, name: '周天常驻', level: 2, description: '周天自成小循环，气海暗合星辰数。你的灵气格+1。' },
+      { id: 20, name: '气海涵虚', level: 2, description: '丹田自辟一方虚界，可藏风云。本回合内使用招式消耗的灵气减少一格，每场战斗中仅一次。' },
+      { id: 21, name: '护身灵宝', level: 2, description: '汝身怀一道蕴法宝，或为机缘所赐之古传承，或为宗门亲长所予之保命秘器。可择以下一相为本源神通:1.血遁替死玉。当你受到致命伤害时，可以将你的血量保持为一格并将你传送至一天内你标记过的一处可到达的地点;2.三华护命霞。每场游戏开始时,你可以获得3格临时血量;3.反噬诛心咒。当你受到超过【重伤阈值】的伤害时，你可以对攻击者造成【核心属性】点反伤;4.镇魂无垢壁。一定程度上免疫金丹以下修士对你神魂的攻击，与神魂相关的干扰术对你效力减少，一场战斗一次，受到【重伤阈值】以上的神魂招式攻击时可以无效化此次神魂伤害。' },
+      { id: 22, name: '玄机秘宝', level: 2, description: '机缘偶得一件异宝，隐泛灵光，似有窥天遁地之能。每历一劫仅可激发一次本源神通，须择其一道炼化:1.洞虚彻明镜。可以协助你看破幻象，寻找周围的线索;2.晦迹藏神纱。可以协助你隐蔽气息。' },
+      { id: 23, name: '异兽道承', level: 2, description: '机缘巧合，得获一缕上古异兽本源印记，可择其一相融于己身道基:1.白泽洞玄识。通古知今的传承,可以让你一次团一次询问你的主持人一个问题,主持人可在有限度内回答真实情况;2.霸下负岳体。强健身心的传承，你的血量格+1;3.嘲风追光影。流光幻影的传承，你在需要身法相关的检定中获得+2。' },
+      
+      // 天级天赋
+      { id: 24, name: '紫金灵葫', level: 3, description: '你获得一个可收纳、炼化低级妖物或阴魂的葫芦法宝，但对强大敌人无效。每次团限用一次。' },
+      { id: 25, name: '青木长生', level: 3, description: '经脉隐泛青霞，气血若春藤不绝。你的正常血量格+1。' },
+      { id: 26, name: '缩地成寸', level: 3, description: '步踏乾坤枢机，缩地脉为寸方。每次团一次,你可以消耗4格灵气,进行一次超远距离的移动,但起点与终点必须皆在你能用肉眼清楚看见的范围内。' },
+      { id: 27, name: '本命灵蛊', level: 3, description: '此蛊乃以自身道基精血所饲，与汝功法同根同源。可择一常备术法与之共生，令该功法可以【回气】，每次长休后重新填充。' },
+      { id: 28, name: '真龙威仪', level: 3, description: '身负一缕上古真龙本源气运，行止间隐有龙吟威压。寻常阵法、灾厄之气近身即散，唯遇金丹以上禁制或天地凶煞绝地方可侵扰道体。万灵见之，皆觉灵台战栗，如见天威。' },
+      { id: 29, name: '先天蕴灵', level: 3, description: '灵台深处自生一道先天器灵,与你同源共长。此灵可化形为法宝,乃常人苦求不得的本命通灵之器。战斗中,你可以消耗1格灵气并以瞬念催动,择一相显化:1.戮伐相。造成2*【核心属性】的伤害/施加一个状态;2.守御相。恢复你或一个周身中距离友军3格血量/灵气。' },
+      { id: 30, name: '混沌道胎', level: 3, description: '先天百脉驳杂，诸般属性灵根在体内相冲相生，化作混沌本源。虽令修行多舛，亦藏寰宇未辟之力。每经历一次长休，你可以选择一个其他道源的道源之法来使用。' },
+     
+      // 仙级天赋
+      { id: 31, name: '斩仙残刃', level: 4, description: '你获得一件威力绝伦的杀戮至宝（残品）斩仙剑（将其放置于你的法宝栏），每次使用都需要消消耗大量灵气及一个完整动作，需要进行一次判定，失败会反噬！法宝无法直接造成伤害，但可斩去对方一个特征！（如坚硬的甲壳）' },
+      { id: 32, name: '先天道体', level: 4, description: '身合混沌初开之象，诸般道韵皆可纳为己用。你可以学习其他道源的神通与秘法且灵气格上限+2。' },
+      { id: 33, name: '春秋必成', level: 4, description: '每次团开始一次。你可以消耗一点福缘点在天道允许范围内改变今天发生过一件事情,投掷一枚D6来决定改变的结果,结果为3-6时改变成功;结果为6时成功且能给你现在的行动带来一定的优势;结果为1、2时失败且会反噬你,给你现在的行动增加阻碍。' },
+      { id: 34, name: '修仙系统', level: 4, description: '你觉醒了修仙系统，每次游戏的开始时，你可以选择两个非核心属性获得+2。每次长休的时候可以重新分配。' }
+    ];
+    
+    // 天谴数据
+    const curses = [
+      // 凡级天谴
+      { id: 1, name: '漏财之相', level: 0, description: '命宫犯破财煞，灵石入手如流沙过指。每次团开始时，你都会扣除少量灵石。' },
+      { id: 2, name: '讷言封唇', level: 0, description: '性朴拙而少机锋，辞出如石坠寒潭。你与陌生人的交涉中检定-1。' },
+      { id: 3, name: '晦云罩面', level: 0, description: '神光内敛，气机驳杂，初遇之人常觉灵台微窒，莫名生疏离戒备之心。' },
+      { id: 4, name: '先天痼疾', level: 0, description: '根基本有瑕，气脉孱弱如残烛。当涉及疾病与中毒等需要仙躯检定时，检定值-1。' },
+      { id: 5, name: '胸无点墨', level: 0, description: '性厌经纶，视文章典册如腐土。在跟文化造诣有关的检定中检定值-1。' },
+      { id: 6, name: '魂瘴难消', level: 0, description: '昔时遭劫，神魂深处留一缕阴蚀裂痕。精神受到打击和创伤，神魂有关奇术检定值-1。' },
+      { id: 7, name: '惨遭退婚', level: 0, description: '昔年一纸退婚书，化作心间缠魂茧。身处有异性之地时，旧痕隐隐牵动道心，诸般作为皆滞一分气机，所有判定减一。' },
+      
+      // 人级天谴
+      { id: 8, name: '命星晦暗', level: 1, description: '运数天生驳杂，每逢新劫初启时，总有一缕缘法如流沙逝去，福缘点数自发减一。' },
+      { id: 9, name: '兵煞缠身', level: 1, description: '命宫犯“孤辰煞”，天生与器灵相斥。每逢御使法宝，必先耗额外灵气镇压自身兵煞之气，方能勉强驱策，故而每用一次，灵气多耗一格。（需要描述为什么！）' },
+      { id: 10, name: '眠蚕夺神', level: 1, description: '三魂中“爽灵”先天萎靡，神思常困于昏沉大渊。短憩长眠时恢复的福缘点-1。' },
+      { id: 11, name: '惊魄未定', level: 1, description: '每逢杀机骤临，心脉易乱如沸水，需耗额外心力镇摄神魂，调息时少回复两格灵气。' },
+      { id: 12, name: '道基残痕', level: 1, description: '你不知何时损伤了你的道体，你使用道源之法时骰D6，如果是3以及以上，则此次道源之法失效，描述因为什么情况导致的！' },
+    
+      // 地级天谴
+      { id: 13, name: '气脉缠结', level: 2, description: '因早年行气差错，灵脉中生出数处郁结之节。周天运转常在此受阻，故气海容量较同境者窄隘一分，灵气上限减一格。' },
+      { id: 14, name: '百畜避煞', level: 2, description: '身带一缕上古“狩煞”余息，兽类嗅之则毛羽倒竖、血脉惊惶，视如天敌现世，纵是温驯灵兽亦会莫名显露敌意。' },
+      { id: 15, name: '太上忘情', level: 2, description: '道途执于“斩情”一诀，却未悟“忘情非枯槁”。如今七情如冻泉滞流，见悲喜无波，遇因缘不扰，只余漠然履约之念。你对任何人任何事都提不起兴趣，无法与他人共情，只是单纯的完成任务。' },
+      { id: 16, name: '不愈道伤', level: 2, description: '昔年受创时被侵染伤口，致气血本源永久缺损一角。纵灵药仙术亦难补此痕，血量格上限减一格。' },
+   
+      // 天级天谴
+      { id: 17, name: '业魂随影', level: 3, description: '一位因你（或你的前世、血脉）而间接死去的无辜者的微弱残魂跟随着你，主持人可以用历练点或在剧情上合理时，让其影响你的判定，让你的某个骰子翻到另外一面。' },
+      { id: 18, name: '灾星', level: 3, description: '每次短休时，你额外给主持人补充1个历练点，而长休时补充两个，描述一下你的不祥预感！' },
+      { id: 19, name: '天外之魔', level: 3, description: '身为魂穿者，你的魂魄与此界天道始终隔着一层无形障壁并未完全弥合。裂隙彼端有一尊【天外之魔】受汝魂光牵引，破界而来。此魔无形无定，或化心魔低语，或显形为扭曲孽物，其威能随你道行增长而攀升（约等同你当前境界的“死战”级强敌）。它将如影随形，在你求道之途的关键处降下阻道之劫。' },
+      { id: 20, name: '缺一之境', level: 3, description: '对于功法神通的领悟总是到九成九，如观月见盈而欠一线，听潮闻声而漏一韵。只差一分无法完全掌握。你的天人合一值+1且无法降低。' },
+      
+      // 仙级天谴
+      { id: 21, name: '道痕', level: 4, description: '你的大道之基上有一道无法愈合的裂痕，你使用道源之法需骰d6，如果不为6则无法使用。' },
+      { id: 22, name: '虚空道标', level: 4, description: '你的灵魂在无尽虚空中，如同一个明亮的道标，主持人拥有的“历练点”可用于在任意时间，向你的位置“投放”一个来自天外、异次元或深渊的、充满恶意的“访客”或“窥探”。它们可能直接攻击，可能扭曲周围环境，也可能只是静静地观察，带来最深沉的恐怖。' },
+      { id: 23, name: '黑棺死运', level: 4, description: '你的气运宛如一口黑色的棺材笼罩在身上，每次游戏，你会有三次检定具有劣势！（由主持人决定何时启动）游戏开始时给主持人额外补充两个历练点。' },
+      { id: 24, name: '至珍宝体', level: 4, description: '你的体质特殊是极佳的炼丹材料，有无数大能和妖兽觊觎着，你在城中或野外时可能会遇到各种势力的追捕。你到达一个新的城镇一定时间后，主持人会获得2个历练点。' },
+      { id: 25, name: '不稳定能量', level: 4, description: '你体内的灵气十分的庞大，以至于有些不稳定，冲突中每经过一个轮次，你扣除一格血量。' }
+    ];
+    
+    // 组合效果数据
+    const combinationEffects = [
+      // 凡级组合
+      "虽然天赋和天谴都很普通，但这种平衡的状态或许正是修炼的真谛。",
+      "平凡中蕴含着伟大，普通的天赋和天谴可能正是你成就大道的基石。",
+      "天赋平凡，天谴轻微，这样的人生或许少了些波澜，但也多了些平静。",
+      
+      // 人级组合
+      "天赋与人级天谴的结合，让你的修炼之路充满了挑战和机遇。",
+      "人级的天赋给了你一定的优势，但人级的天谴也会给你带来不少麻烦。",
+      "在挑战中成长，在困难中坚强，这或许就是人级组合的真谛。",
+      
+      // 地级组合
+      "地级的天赋让你在修炼之路上事半功倍，但地级的天谴也会给你带来不小的麻烦。",
+      "强大的天赋与强大的天谴并存，这样的组合让你的人生充满了变数。",
+      "地级的组合意味着你已经站在了修炼界的中上层，未来的路还很长。",
+      
+      // 天级组合
+      "天级的天赋让你成为了修炼界的佼佼者，但天级的天谴也会让你面临前所未有的挑战。",
+      "天赋与天谴的双重压力，要么让你彻底崩溃，要么让你破茧成蝶，成为真正的强者。",
+      "天级的组合意味着你已经踏上了成仙之路，但这条路充满了荆棘和危险。",
+      
+      // 仙级组合
+      "仙级的天赋与仙级的天谴，这样的组合已经超出了常理，你注定要成为一个传奇。",
+      "天赋通天，天谴灭世，这样的组合让你的人生充满了传奇色彩。",
+      "仙级的组合意味着你已经触摸到了天道的边缘，未来的路将更加艰难，但也更加精彩。",
+      
+      // 特殊组合
+      "天赋与天谴的等级相差悬殊，这样的组合让你的人生充满了不确定性。",
+      "高等级的天赋与低等级的天谴，这样的组合让你在修炼之路上占尽优势。",
+      "低等级的天赋与高等级的天谴，这样的组合让你的修炼之路充满了挑战，但也更加锻炼人的意志。",
+      "天赋与天谴的属性相互克制，这样的组合让你的修炼之路充满了变数。",
+      "天赋与天谴的属性相互增益，这样的组合让你的修炼之路事半功倍。"
+    ];
+    
+    // DOM元素
+    const wheel = document.getElementById('wheel');
+    const drawBtn = document.getElementById('drawBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const resultArea = document.getElementById('resultArea');
+    const scroll = document.getElementById('scroll');
+    const talentInfo = document.getElementById('talentInfo');
+    const curseInfo = document.getElementById('curseInfo');
+    const combinationEffect = document.getElementById('combinationEffect');
+    const overlay = document.getElementById('overlay');
+    const overlayText = document.getElementById('overlayText');
+    const currentMode = document.getElementById('currentMode');
+    
+    // 全局变量
+    let isSpinning = false;
+    let currentDrawMode = 'talent'; // 'talent' 或 'curse'
+    let selectedTalent = null;
+    let selectedCurse = null;
+    
+    // 初始化
+    function init() {
+      drawBtn.addEventListener('click', startDraw);
+      resetBtn.addEventListener('click', resetDraw);
+    }
+    
+    // 开始抽奖
+    function startDraw() {
+      if (isSpinning) return;
+      
+      // 清除所有粒子效果，确保转盘上没有残留的点
+      const particles = document.querySelectorAll('.particle');
+      particles.forEach(p => p.remove());
+      
+      isSpinning = true;
+      drawBtn.disabled = true;
+      
+      // 显示遮罩层
+      overlayText.textContent = currentDrawMode === 'talent' ? '正在抽取天赋...' : '正在抽取天谴...';
+      overlay.classList.add('active');
+      
+      // 随机选择一个项目
+      const items = currentDrawMode === 'talent' ? talents : curses;
+      const selectedItem = items[Math.floor(Math.random() * items.length)];
+      
+      // 计算旋转角度
+      const levelAngle = 360 / 5;
+      const baseAngle = selectedItem.level * levelAngle;
+      const randomAngle = Math.random() * levelAngle;
+      const totalAngle = 1080 + baseAngle + randomAngle; // 至少旋转3圈
+      
+      // 应用旋转动画
+      setTimeout(() => {
+        wheel.style.transform = `rotate(${totalAngle}deg)`;
+        
+        // 动画结束后显示结果
+        setTimeout(() => {
+          overlay.classList.remove('active');
+          
+          if (currentDrawMode === 'talent') {
+            selectedTalent = selectedItem;
+            showTalentResult(selectedItem);
+            
+            // 切换到天谴抽取模式
+            currentDrawMode = 'curse';
+            currentMode.textContent = '天谴抽取';
+            drawBtn.disabled = false;
+            isSpinning = false;
+          } else {
+            selectedCurse = selectedItem;
+            showCurseResult(selectedItem);
+            showCombinationEffect();
+            
+            // 显示结果区域和卷轴动画
+            resultArea.style.display = 'block';
+            setTimeout(() => {
+              scroll.classList.add('active');
+            }, 100);
+            
+            // 显示重新抽取按钮
+            drawBtn.style.display = 'none';
+            resetBtn.style.display = 'inline-block';
+            resetBtn.disabled = false;
+            isSpinning = false;
+            
+            // 创建庆祝效果
+            createCelebrationEffect();
+          }
+        }, 1000);
+      }, 500);
+    }
+    
+    // 显示天赋结果
+    function showTalentResult(talent) {
+      const level = levels[talent.level];
+      
+      talentInfo.innerHTML = `
+        <div class="flex items-center">
+          <span class="level-badge bg-${level.color} mr-2">${level.icon} ${level.name}级</span>
+          <h4 class="text-xl font-bold">${talent.name}</h4>
+        </div>
+        <p class="mt-2">${talent.description}</p>
+      `;
+    }
+    
+    // 显示天谴结果
+    function showCurseResult(curse) {
+      const level = levels[curse.level];
+      
+      curseInfo.innerHTML = `
+        <div class="flex items-center">
+          <span class="level-badge bg-${level.color} mr-2">${level.icon} ${level.name}级</span>
+          <h4 class="text-xl font-bold">${curse.name}</h4>
+        </div>
+        <p class="mt-2">${curse.description}</p>
+      `;
+    }
+    
+    // 显示组合效果
+    function showCombinationEffect() {
+      if (!selectedTalent || !selectedCurse) return;
+      
+      // 根据天赋和天谴的等级选择组合效果
+      let effectIndex;
+      const talentLevel = selectedTalent.level;
+      const curseLevel = selectedCurse.level;
+      
+      // 清除之前的动画类
+      const talentCard = document.getElementById('talentResult');
+      const curseCard = document.getElementById('curseResult');
+      const combinationCard = document.querySelector('.mt-6.xianxia-card');
+      
+      talentCard.classList.remove('talent-dominant', 'curse-dominant', 'balanced-animation');
+      curseCard.classList.remove('talent-dominant', 'curse-dominant', 'balanced-animation');
+      combinationCard.classList.remove('talent-dominant', 'curse-dominant', 'balanced-animation');
+      
+      if (talentLevel > curseLevel) {
+        // 天赋等级大于天谴等级
+        const levelDiff = talentLevel - curseLevel;
+        effectIndex = 15 + Math.min(levelDiff - 1, 4);
+        
+        // 添加天赋主导的动画效果
+        talentCard.classList.add('talent-dominant');
+        combinationCard.style.borderColor = '#4CAF50';
+        combinationCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(76, 175, 80, 0.3)';
+        
+      } else if (curseLevel > talentLevel) {
+        // 天谴等级大于天赋等级
+        const levelDiff = curseLevel - talentLevel;
+        effectIndex = 15 + Math.min(levelDiff - 1, 4);
+        
+        // 添加天谴主导的动画效果
+        curseCard.classList.add('curse-dominant');
+        combinationCard.style.borderColor = '#F44336';
+        combinationCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(244, 67, 54, 0.3)';
+        
+      } else {
+        // 等级相同的组合
+        const levelStartIndex = talentLevel * 3;
+        const randomOffset = Math.floor(Math.random() * 3);
+        effectIndex = levelStartIndex + randomOffset;
+        
+        // 添加平衡的动画效果
+        talentCard.classList.add('balanced-animation');
+        curseCard.classList.add('balanced-animation');
+        combinationCard.style.borderColor = '#2196F3';
+        combinationCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(33, 150, 243, 0.3)';
+      }
+      
+      // 确保索引在有效范围内
+      effectIndex = Math.min(effectIndex, combinationEffects.length - 1);
+      
+      combinationEffect.textContent = combinationEffects[effectIndex];
+      
+      // 根据不同的组合类型创建不同的庆祝效果
+      createResultEffect(talentLevel, curseLevel);
+    }
+    
+    // 重置抽奖
+    function resetDraw() {
+      // 清除所有粒子效果
+      const particles = document.querySelectorAll('.particle');
+      particles.forEach(p => p.remove());
+      
+      // 重置卡片样式
+      const talentCard = document.getElementById('talentResult');
+      const curseCard = document.getElementById('curseResult');
+      const combinationCard = document.querySelector('.mt-6.xianxia-card');
+      
+      talentCard.classList.remove('talent-dominant', 'curse-dominant', 'balanced-animation');
+      curseCard.classList.remove('talent-dominant', 'curse-dominant', 'balanced-animation');
+      combinationCard.classList.remove('talent-dominant', 'curse-dominant', 'balanced-animation');
+      
+      // 重置组合卡片的边框和阴影
+      combinationCard.style.borderColor = '';
+      combinationCard.style.boxShadow = '';
+      
+      // 重置状态
+      selectedTalent = null;
+      selectedCurse = null;
+      currentDrawMode = 'talent';
+      currentMode.textContent = '天赋抽取';
+      
+      // 重置UI
+      wheel.style.transform = 'rotate(0deg)';
+      resultArea.style.display = 'none';
+      scroll.classList.remove('active');
+      talentInfo.innerHTML = '';
+      curseInfo.innerHTML = '';
+      combinationEffect.textContent = '';
+      
+      // 显示抽取按钮，隐藏重置按钮
+      drawBtn.style.display = 'inline-block';
+      resetBtn.style.display = 'none';
+      
+      // 启用抽取按钮
+      drawBtn.disabled = false;
+      isSpinning = false;
+    }
+    
+    // 创建庆祝效果
+    function createCelebrationEffect() {
+      // 清除之前可能残留的粒子
+      const oldParticles = document.querySelectorAll('.particle');
+      oldParticles.forEach(p => p.remove());
+      
+      const container = document.body;
+      const colors = ['#F44336', '#2196F3', '#4CAF50', '#FF9800', '#9C27B0'];
+      
+      // 创建100个粒子
+      for (let i = 0; i < 100; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // 随机大小和颜色
+        const size = Math.random() * 10 + 5;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.backgroundColor = color;
+        
+        // 随机位置（从中心向外扩散）
+        const startX = window.innerWidth / 2;
+        const startY = window.innerHeight / 2;
+        particle.style.left = `${startX}px`;
+        particle.style.top = `${startY}px`;
+        
+        // 随机速度和方向
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 5 + 2;
+        const vx = Math.cos(angle) * speed;
+        const vy = Math.sin(angle) * speed;
+        
+        // 添加到容器
+        container.appendChild(particle);
+        
+        // 动画
+        let x = startX;
+        let y = startY;
+        let opacity = 1;
+        
+        function animate() {
+          x += vx;
+          y += vy;
+          vy += 0.1; // 重力
+          opacity -= 0.02;
+          
+          particle.style.left = `${x}px`;
+          particle.style.top = `${y}px`;
+          particle.style.opacity = opacity;
+          
+          if (opacity > 0 && x > 0 && x < window.innerWidth && y > 0 && y < window.innerHeight) {
+            requestAnimationFrame(animate);
+          } else {
+            if (container.contains(particle)) {
+              container.removeChild(particle);
+            }
+          }
+        }
+        
+        animate();
+      }
+    }
+    
+    // 根据结果类型创建不同的效果
+    function createResultEffect(talentLevel, curseLevel) {
+      const container = document.body;
+      let colors = [];
+      let particleCount = 150;
+      let startX, startY;
+      
+      if (talentLevel > curseLevel) {
+        // 天赋主导效果 - 绿色粒子从天赋卡片飞出
+        colors = ['#4CAF50', '#8BC34A', '#CDDC39', '#4CAF50', '#8BC34A'];
+        const talentCard = document.getElementById('talentResult');
+        const rect = talentCard.getBoundingClientRect();
+        startX = rect.left + rect.width / 2;
+        startY = rect.top + rect.height / 2;
+        
+      } else if (curseLevel > talentLevel) {
+        // 天谴主导效果 - 红色粒子从天谴卡片飞出
+        colors = ['#F44336', '#E91E63', '#9C27B0', '#F44336', '#E91E63'];
+        const curseCard = document.getElementById('curseResult');
+        const rect = curseCard.getBoundingClientRect();
+        startX = rect.left + rect.width / 2;
+        startY = rect.top + rect.height / 2;
+        
+      } else {
+        // 平衡效果 - 蓝色粒子从中间飞出
+        colors = ['#2196F3', '#03A9F4', '#00BCD4', '#2196F3', '#03A9F4'];
+        const combinationCard = document.querySelector('.mt-6.xianxia-card');
+        const rect = combinationCard.getBoundingClientRect();
+        startX = rect.left + rect.width / 2;
+        startY = rect.top + rect.height / 2;
+      }
+      
+      // 创建粒子
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // 随机大小和颜色
+        const size = Math.random() * 8 + 3;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.backgroundColor = color;
+        particle.style.borderRadius = talentLevel === curseLevel ? '50%' : '0';
+        
+        // 从对应卡片位置开始
+        particle.style.left = `${startX}px`;
+        particle.style.top = `${startY}px`;
+        
+        // 添加到容器
+        container.appendChild(particle);
+        
+        // 动画
+        let x = startX;
+        let y = startY;
+        let opacity = 1;
+        
+        // 根据不同类型设置不同的速度和方向
+        let angle, speed, vx, vy;
+        if (talentLevel > curseLevel) {
+          // 天赋主导 - 向右上方飞
+          angle = Math.random() * Math.PI / 2 - Math.PI / 4; // -45度到45度
+          speed = Math.random() * 6 + 3;
+        } else if (curseLevel > talentLevel) {
+          // 天谴主导 - 向左上方飞
+          angle = Math.random() * Math.PI / 2 + Math.PI * 3/4; // 135度到225度
+          speed = Math.random() * 6 + 3;
+        } else {
+          // 平衡 - 向四周飞
+          angle = Math.random() * Math.PI * 2;
+          speed = Math.random() * 5 + 2;
+        }
+        
+        vx = Math.cos(angle) * speed;
+        vy = Math.sin(angle) * speed;
+        
+        function animate() {
+          x += vx;
+          y += vy;
+          
+          // 平衡效果添加旋转
+          if (talentLevel === curseLevel) {
+            particle.style.transform = `rotate(${x * 0.5}deg)`;
+          }
+          
+          // 天赋主导效果添加上升力
+          if (talentLevel > curseLevel) {
+            vy -= 0.05; // 上升力
+          }
+          
+          // 天谴主导效果添加下降力
+          if (curseLevel > talentLevel) {
+            vy += 0.05; // 下降力
+          }
+          
+          vy *= 0.98; // 空气阻力
+          vx *= 0.98;
+          opacity -= 0.015;
+          
+          particle.style.left = `${x}px`;
+          particle.style.top = `${y}px`;
+          particle.style.opacity = opacity;
+          
+          if (opacity > 0 && x > -50 && x < window.innerWidth + 50 && y > -50 && y < window.innerHeight + 50) {
+            requestAnimationFrame(animate);
+          } else {
+            if (container.contains(particle)) {
+              container.removeChild(particle);
+            }
+          }
+        }
+        
+        animate();
+      }
+    }
+    
+    // 初始化
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+
+</body></html>
