@@ -121,6 +121,26 @@
       margin: 0 auto;
     }
     
+    /* 移动端转盘大小优化 */
+    @media (max-width: 480px) {
+      .wheel-container {
+        width: 240px;
+        height: 240px;
+      }
+      
+      .wheel-center {
+        width: 32px;
+        height: 32px;
+      }
+      
+      .wheel-pointer {
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+        border-bottom: 24px solid #8B4513;
+        top: -16px;
+      }
+    }
+    
     .wheel {
       width: 100%;
       height: 100%;
@@ -584,8 +604,8 @@
       
       // 特殊组合
       "天赋与天谴的等级相差悬殊，这样的组合让你的人生充满了不确定性。",
-      "高等级的天赋与低等级的天谴，这样的组合让你在修炼之路上占尽优势。",
-      "低等级的天赋与高等级的天谴，这样的组合让你的修炼之路充满了挑战，但也更加锻炼人的意志。",
+      "强大的天赋与弱小的天谴，这样的组合让你在修炼之路上占尽优势。",
+      "弱小的天赋与强大的天谴，这样的组合让你的修炼之路充满了挑战，但也更加锻炼人的意志。",
       "天赋与天谴的属性相互克制，这样的组合让你的修炼之路充满了变数。",
       "天赋与天谴的属性相互增益，这样的组合让你的修炼之路事半功倍。"
     ];
@@ -727,7 +747,7 @@
       
       if (talentLevel > curseLevel) {
         // 天赋等级大于天谴等级
-        effectIndex = 16; // "高等级的天赋与低等级的天谴，这样的组合让你在修炼之路上占尽优势。"
+        effectIndex = 16; // "强大的天赋与弱小的天谴，这样的组合让你在修炼之路上占尽优势。"
         
         // 添加天赋主导的动画效果
         talentCard.classList.add('talent-dominant');
@@ -736,7 +756,7 @@
         
       } else if (curseLevel > talentLevel) {
         // 天谴等级大于天赋等级
-        effectIndex = 17; // "低等级的天赋与高等级的天谴，这样的组合让你的修炼之路充满了挑战，但也更加锻炼人的意志。"
+        effectIndex = 17; // "弱小的天赋与强大的天谴，这样的组合让你的修炼之路充满了挑战，但也更加锻炼人的意志。"
         
         // 添加天谴主导的动画效果
         curseCard.classList.add('curse-dominant');
