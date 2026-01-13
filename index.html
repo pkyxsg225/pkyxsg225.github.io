@@ -25,7 +25,7 @@
             'xianxia-accent': '#8B4513', // 古铜色
           },
           fontFamily: {
-            sans: ['KaiTi', '楷体', 'DFKai-SB', 'STKaiti', 'SimKai', 'serif'],
+            sans: ['Inter', 'Noto Sans SC', 'sans-serif'],
           },
           animation: {
             'spin-slow': 'spin 3s linear infinite',
@@ -92,55 +92,31 @@
       .scroll-reveal.active {
         max-height: 500px;
       }
-      .particle {
+      /* 移除粒子效果 */
+      /* .particle {
         position: absolute;
         border-radius: 50%;
         pointer-events: none;
         opacity: 0.8;
-      }
-      .hamburger {
-        display: inline-block;
-        width: 16px;
-        height: 12px;
-        position: relative;
-      }
-      .hamburger span {
-        display: block;
-        position: absolute;
-        height: 2px;
-        width: 100%;
-        background: currentColor;
-        border-radius: 2px;
-        opacity: 1;
-        left: 0;
-        transform: rotate(0deg);
-        transition: .25s ease-in-out;
-      }
-      .hamburger span:nth-child(1) {
-        top: 0px;
-      }
-      .hamburger span:nth-child(2) {
-        top: 5px;
-      }
-      .hamburger span:nth-child(3) {
-        top: 10px;
-      }
+      } */
     }
   </style>
   <style>
     /* 全局样式 */
-    * {
-      font-family: 'KaiTi', '楷体', 'DFKai-SB', 'STKaiti', 'SimKai', 'serif' !important;
-    }
-    
     body {
       background-color: #F5EFE0;
       background-image: url('background.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-      color: #f0f0f0;
+      color: #5D4037;
+      font-family: 'Inter', 'Noto Sans SC', sans-serif;
       overflow-x: hidden;
+    }
+    
+    /* 特定元素使用楷体 */
+    h1, p, span, button {
+      font-family: 'KaiTi', '楷体', 'DFKai-SB', 'STKaiti', 'SimKai', 'serif' !important;
     }
     
     /* 转盘样式 */
@@ -412,24 +388,20 @@
       animation: glow 2s ease-in-out infinite alternate;
     }
     
-    /* 粒子效果 */
-    .particle {
+    /* 移除粒子效果 */
+    /* .particle {
       position: absolute;
       border-radius: 50%;
       pointer-events: none;
       opacity: 0.8;
-    }
+    } */
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
   <!-- 侧边栏按钮 -->
   <div class="fixed top-4 right-2 z-50">
     <button id="sidebarToggle" class="xianxia-btn text-xs px-3 py-1 flex items-center justify-center">
-      <span class="hamburger mr-1">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>菜单
+      <i class="fa fa-bars mr-1"></i>菜单
     </button>
     
     <!-- 侧边栏 -->
@@ -872,9 +844,7 @@
     function startDraw() {
       if (isSpinning) return;
       
-      // 清除所有粒子效果，确保转盘上没有残留的点
-      const particles = document.querySelectorAll('.particle');
-      particles.forEach(p => p.remove());
+      // 移除粒子效果清除代码
       
       isSpinning = true;
       drawBtn.disabled = true;
@@ -927,8 +897,7 @@
             resetBtn.disabled = false;
             isSpinning = false;
             
-            // 创建庆祝效果
-            createCelebrationEffect();
+            // 移除庆祝效果
           }
         }, 1000);
       }, 500);
@@ -1014,15 +983,12 @@
       
       combinationEffect.textContent = combinationEffects[effectIndex];
       
-      // 根据不同的组合类型创建不同的庆祝效果
-      createResultEffect(talentLevel, curseLevel);
+      // 移除结果效果
     }
     
     // 重置抽奖
     function resetDraw() {
-      // 清除所有粒子效果
-      const particles = document.querySelectorAll('.particle');
-      particles.forEach(p => p.remove());
+      // 移除粒子效果清除代码
       
       // 重置卡片样式
       const talentCard = document.getElementById('talentResult');
