@@ -5,7 +5,7 @@
   <!-- Tailwind CSS v3 -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome -->
-  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <!-- 统一的 Tailwind 配置 -->
   <script>
     tailwind.config = {
@@ -114,9 +114,10 @@
       overflow-x: hidden;
     }
     
-    /* 特定元素使用楷体 */
+    /* 特定元素使用楷体和黑色 */
     h1, p, span, button {
       font-family: 'KaiTi', '楷体', 'DFKai-SB', 'STKaiti', 'SimKai', 'serif' !important;
+      color: black !important;
     }
     
     /* 转盘样式 */
@@ -423,7 +424,7 @@
   <!-- 页面容器 -->
     <div class="container mx-auto px-4 py-8 flex-grow flex flex-col">
     <!-- 标题区域 -->
-    <header class="text-center mb-8">
+    <header class="text-center mt-[-2rem] mb-4">
       <h1 class="text-4xl md:text-5xl font-bold text-[#f0fff0] mb-2 text-shadow-lg">天赋天谴抽取</h1>
       <p class="text-xl text-[#f0fff0]">逆天改命，仙道茫茫</p>
     </header>
@@ -561,90 +562,135 @@
     // 天赋数据
     const talents = [
       // 凡级天赋
-      { id: 1, name: '灵囊妙法', level: 0, description: '每逢历练伊始，行囊中自生一缘法小物，助渡此程。' },
-      { id: 2, name: '造化手', level: 0, description: '捻木成器，点铁通灵，凡涉机巧锻铸、百工制物之事，自有道韵随指，所有工具制作相关上的检定+1。' },
-      { id: 3, name: '无垢之体', level: 0, description: '自幼百病不侵，坠崖落石亦如常，跟仙躯有关的检定时+1。' },
-      { id: 4, name: '坐忘尘嚣', level: 0, description: '万般毁誉过灵台而不留痕，诸相诳语皆如清风拂镜，在与他人交流中进行对抗检定时+1。' },
-      { id: 5, name: '灵枢通明', level: 0, description: '气随念转，意动则周天流转无滞，运用灵气驱动奇术时检定+1。' },
-      { id: 6, name: '十方魂鼎', level: 0, description: '生而魂光盈室，神完若成人；及冠则三魂凝实，七魄如柱，在进行魂魄对抗时检定+1。' },
-      { id: 7, name: '磐骨罡躯', level: 0, description: '筋如蛟索，骨若精钢，在进行力量对抗时检定+1。' },
-      { id: 8, name: '浩然正气', level: 0, description: '性秉阳和，神含正气，言出如金石振玉。凡遇良善仁德之士，语带天罡，你在说服善良之人的检定中+1。' },
-      { id: 9, name: '明心见性', level: 0, description: '浮云过眼，万劫成灰。纵逢九幽噬骨、红尘炼心之厄，灵台长明不晦，道心自守。你道心相关检定难度-1。' },
+      { id: 1, name: '灵囊妙法', level: 0, description: '每逢历练伊始，行囊中自生一缘法小物，助渡此程。', logo: 'talent-logo-1.png' },
+      { id: 2, name: '造化手', level: 0, description: '捻木成器，点铁通灵，凡涉机巧锻铸、百工制物之事，自有道韵随指，所有工具制作相关上的检定+1。', logo: 'talent-logo-2.png' },
+      { id: 3, name: '无垢之体', level: 0, description: '自幼百病不侵，坠崖落石亦如常，跟仙躯有关的检定时+1。', logo: 'talent-logo-3.png' },
+      { id: 4, name: '坐忘尘嚣', level: 0, description: '万般毁誉过灵台而不留痕，诸相诳语皆如清风拂镜，在与他人交流中进行对抗检定时+1。', logo: 'talent-logo-4.png' },
+      { id: 5, name: '灵枢通明', level: 0, description: '气随念转，意动则周天流转无滞，运用灵气驱动奇术时检定+1。', logo: 'talent-logo-5.png' },
+      { id: 6, name: '十方魂鼎', level: 0, description: '生而魂光盈室，神完若成人；及冠则三魂凝实，七魄如柱，在进行魂魄对抗时检定+1。', logo: 'talent-logo-6.png' },
+      { id: 7, name: '磐骨罡躯', level: 0, description: '筋如蛟索，骨若精钢，在进行力量对抗时检定+1。', logo: 'talent-logo-7.png' },
+      { id: 8, name: '浩然正气', level: 0, description: '性秉阳和，神含正气，言出如金石振玉。凡遇良善仁德之士，语带天罡，你在说服善良之人的检定中+1。', logo: 'talent-logo-8.png' },
+      { id: 9, name: '明心见性', level: 0, description: '浮云过眼，万劫成灰。纵逢九幽噬骨、红尘炼心之厄，灵台长明不晦，道心自守。你道心相关检定难度-1。', logo: 'talent-logo-9.png' },
       
       // 人级天赋
-      { id: 10, name: '福灵心至', level: 1, description: '每逢劫起云涌、因果初结之时。天机垂顾一缕。每次开团时你获得1个额外福缘点。' },
-      { id: 11, name: '草木通心', level: 1, description: '可聆百木低语，感花草幽情。你可与普通的花草树木进行简单沟通，感知它们近期情绪。' },
-      { id: 12, name: '神农脉承', level: 1, description: '幼随亲履千峰，识得百草灵晦。你在跟草药有关的检定中具有优势，游戏开始时和每次短休后，你可以获得一枚对应你等阶的丹药。' },
-      { id: 13, name: '通宝灵犀', level: 1, description: '家承累世商脉，万贯灵韵汇于双目。你在非特殊情况下，可随意参与商会与拍卖，交易时可以看出商家是否偷工减料或有所隐藏。' },
-      { id: 14, name: '妙辩天音', level: 1, description: '舌绽莲华，言携道韵。凡论道说理、交涉劝化之时，语出自有清正灵机绕耳，使人闻之易信，与他人交谈需要检定时你具有优势。' },
-      { id: 15, name: '罗刹怒相', level: 1, description: '生就豹目环睛，煞气盈面，瞪视如寒锋慑魂。你每次冲突中第一次对敌人的检定必定成功(非大成功/大失败时骰子当作双6,但不视为大成功)' },
-      { id: 16, name: '道心坚定', level: 1, description: '灵台自锁菩提镜，万相纷纭不染尘。你的道心检定获得优势。' },
-      { id: 17, name: '玲珑通明', level: 1, description: '七窍澄澈，和气盈怀，如沐春风拂玉树。对你无恶意的人见到你会产生好感。' },
+      { id: 10, name: '福灵心至', level: 1, description: '每逢劫起云涌、因果初结之时。天机垂顾一缕。每次开团时你获得1个额外福缘点。', logo: 'talent-logo-10.png' },
+      { id: 11, name: '草木通心', level: 1, description: '可聆百木低语，感花草幽情。你可与普通的花草树木进行简单沟通，感知它们近期情绪。', logo: 'talent-logo-11.png' },
+      { id: 12, name: '神农脉承', level: 1, description: '幼随亲履千峰，识得百草灵晦。你在跟草药有关的检定中具有优势，游戏开始时和每次短休后，你可以获得一枚对应你等阶的丹药。', logo: 'talent-logo-12.png' },
+      { id: 13, name: '通宝灵犀', level: 1, description: '家承累世商脉，万贯灵韵汇于双目。你在非特殊情况下，可随意参与商会与拍卖，交易时可以看出商家是否偷工减料或有所隐藏。', logo: 'talent-logo-13.png' },
+      { id: 14, name: '妙辩天音', level: 1, description: '舌绽莲华，言携道韵。凡论道说理、交涉劝化之时，语出自有清正灵机绕耳，使人闻之易信，与他人交谈需要检定时你具有优势。', logo: 'talent-logo-14.png' },
+      { id: 15, name: '罗刹怒相', level: 1, description: '生就豹目环睛，煞气盈面，瞪视如寒锋慑魂。你每次冲突中第一次对敌人的检定必定成功(非大成功/大失败时骰子当作双6,但不视为大成功)', logo: 'talent-logo-15.png' },
+      { id: 16, name: '道心坚定', level: 1, description: '灵台自锁菩提镜，万相纷纭不染尘。你的道心检定获得优势。', logo: 'talent-logo-16.png' },
+      { id: 17, name: '玲珑通明', level: 1, description: '七窍澄澈，和气盈怀，如沐春风拂玉树。对你无恶意的人见到你会产生好感。', logo: 'talent-logo-17.png' },
       
       // 地级天赋
-      { id: 18, name: '灵犀指踪', level: 2, description: '可于天地万物间落一缕心印灵痕，唯汝目可视。你可以在任意地方留下一个只有你能看见的灵力标记，在相同时空中能感知其大致方向。' },
-      { id: 19, name: '周天常驻', level: 2, description: '周天自成小循环，气海暗合星辰数。你的灵气格+1。' },
-      { id: 20, name: '气海涵虚', level: 2, description: '丹田自辟一方虚界，可藏风云。本回合内使用招式消耗的灵气减少一格，每场战斗中仅一次。' },
-      { id: 21, name: '护身灵宝', level: 2, description: '汝身怀一道蕴法宝，或为机缘所赐之古传承，或为宗门亲长所予之保命秘器。可择以下一相为本源神通:1.血遁替死玉。当你受到致命伤害时，可以将你的血量保持为一格并将你传送至一天内你标记过的一处可到达的地点;2.三华护命霞。每场游戏开始时,你可以获得3格临时血量;3.反噬诛心咒。当你受到超过【重伤阈值】的伤害时，你可以对攻击者造成【核心属性】点反伤;4.镇魂无垢壁。一定程度上免疫金丹以下修士对你神魂的攻击，与神魂相关的干扰术对你效力减少，一场战斗一次，受到【重伤阈值】以上的神魂招式攻击时可以无效化此次神魂伤害。' },
-      { id: 22, name: '玄机秘宝', level: 2, description: '机缘偶得一件异宝，隐泛灵光，似有窥天遁地之能。每历一劫仅可激发一次本源神通，须择其一道炼化:1.洞虚彻明镜。可以协助你看破幻象，寻找周围的线索;2.晦迹藏神纱。可以协助你隐蔽气息。' },
-      { id: 23, name: '异兽道承', level: 2, description: '机缘巧合，得获一缕上古异兽本源印记，可择其一相融于己身道基:1.白泽洞玄识。通古知今的传承,可以让你一次团一次询问你的主持人一个问题,主持人可在有限度内回答真实情况;2.霸下负岳体。强健身心的传承，你的血量格+1;3.嘲风追光影。流光幻影的传承，你在需要身法相关的检定中获得+2。' },
+      { id: 18, name: '灵犀指踪', level: 2, description: '可于天地万物间落一缕心印灵痕，唯汝目可视。你可以在任意地方留下一个只有你能看见的灵力标记，在相同时空中能感知其大致方向。', logo: 'talent-logo-18.png' },
+      { id: 19, name: '周天常驻', level: 2, description: '周天自成小循环，气海暗合星辰数。你的灵气格+1。', logo: 'talent-logo-19.png' },
+      { id: 20, name: '气海涵虚', level: 2, description: '丹田自辟一方虚界，可藏风云。本回合内使用招式消耗的灵气减少一格，每场战斗中仅一次。', logo: 'talent-logo-20.png' },
+      { id: 21, name: '护身灵宝', level: 2, description: '汝身怀一道蕴法宝，或为机缘所赐之古传承，或为宗门亲长所予之保命秘器。可择以下一相为本源神通:1.血遁替死玉。当你受到致命伤害时，可以将你的血量保持为一格并将你传送至一天内你标记过的一处可到达的地点;2.三华护命霞。每场游戏开始时,你可以获得3格临时血量;3.反噬诛心咒。当你受到超过【重伤阈值】的伤害时，你可以对攻击者造成【核心属性】点反伤;4.镇魂无垢壁。一定程度上免疫金丹以下修士对你神魂的攻击，与神魂相关的干扰术对你效力减少，一场战斗一次，受到【重伤阈值】以上的神魂招式攻击时可以无效化此次神魂伤害。', logo: 'talent-logo-21.png' },
+      { id: 22, name: '玄机秘宝', level: 2, description: '机缘偶得一件异宝，隐泛灵光，似有窥天遁地之能。每历一劫仅可激发一次本源神通，须择其一道炼化:1.洞虚彻明镜。可以协助你看破幻象，寻找周围的线索;2.晦迹藏神纱。可以协助你隐蔽气息。', logo: 'talent-logo-22.png' },
+      { id: 23, name: '异兽道承', level: 2, description: '机缘巧合，得获一缕上古异兽本源印记，可择其一相融于己身道基:1.白泽洞玄识。通古知今的传承,可以让你一次团一次询问你的主持人一个问题,主持人可在有限度内回答真实情况;2.霸下负岳体。强健身心的传承，你的血量格+1;3.嘲风追光影。流光幻影的传承，你在需要身法相关的检定中获得+2。', logo: 'talent-logo-23.png' },
       
       // 天级天赋
-      { id: 24, name: '紫金灵葫', level: 3, description: '你获得一个可收纳、炼化低级妖物或阴魂的葫芦法宝，但对强大敌人无效。每次团限用一次。' },
-      { id: 25, name: '青木长生', level: 3, description: '经脉隐泛青霞，气血若春藤不绝。你的正常血量格+1。' },
-      { id: 26, name: '缩地成寸', level: 3, description: '步踏乾坤枢机，缩地脉为寸方。每次团一次,你可以消耗4格灵气,进行一次超远距离的移动,但起点与终点必须皆在你能用肉眼清楚看见的范围内。' },
-      { id: 27, name: '本命灵蛊', level: 3, description: '此蛊乃以自身道基精血所饲，与汝功法同根同源。可择一常备术法与之共生，令该功法可以【回气】，每次长休后重新填充。' },
-      { id: 28, name: '真龙威仪', level: 3, description: '身负一缕上古真龙本源气运，行止间隐有龙吟威压。寻常阵法、灾厄之气近身即散，唯遇金丹以上禁制或天地凶煞绝地方可侵扰道体。万灵见之，皆觉灵台战栗，如见天威。' },
-      { id: 29, name: '先天蕴灵', level: 3, description: '灵台深处自生一道先天器灵,与你同源共长。此灵可化形为法宝,乃常人苦求不得的本命通灵之器。战斗中,你可以消耗1格灵气并以瞬念催动,择一相显化:1.戮伐相。造成2*【核心属性】的伤害/施加一个状态;2.守御相。恢复你或一个周身中距离友军3格血量/灵气。' },
-      { id: 30, name: '混沌道胎', level: 3, description: '先天百脉驳杂，诸般属性灵根在体内相冲相生，化作混沌本源。虽令修行多舛，亦藏寰宇未辟之力。每经历一次长休，你可以选择一个其他道源的道源之法来使用。' },
+      { id: 24, name: '紫金灵葫', level: 3, description: '你获得一个可收纳、炼化低级妖物或阴魂的葫芦法宝，但对强大敌人无效。每次团限用一次。', logo: 'talent-logo-24.png' },
+      { id: 25, name: '青木长生', level: 3, description: '经脉隐泛青霞，气血若春藤不绝。你的正常血量格+1。', logo: 'talent-logo-25.png' },
+      { id: 26, name: '缩地成寸', level: 3, description: '步踏乾坤枢机，缩地脉为寸方。每次团一次,你可以消耗4格灵气,进行一次超远距离的移动,但起点与终点必须皆在你能用肉眼清楚看见的范围内。', logo: 'talent-logo-26.png' },
+      { id: 27, name: '本命灵蛊', level: 3, description: '此蛊乃以自身道基精血所饲，与汝功法同根同源。可择一常备术法与之共生，令该功法可以【回气】，每次长休后重新填充。', logo: 'talent-logo-27.png' },
+      { id: 28, name: '真龙威仪', level: 3, description: '身负一缕上古真龙本源气运，行止间隐有龙吟威压。寻常阵法、灾厄之气近身即散，唯遇金丹以上禁制或天地凶煞绝地方可侵扰道体。万灵见之，皆觉灵台战栗，如见天威。', logo: 'talent-logo-28.png' },
+      { id: 29, name: '先天蕴灵', level: 3, description: '灵台深处自生一道先天器灵,与你同源共长。此灵可化形为法宝,乃常人苦求不得的本命通灵之器。战斗中,你可以消耗1格灵气并以瞬念催动,择一相显化:1.戮伐相。造成2*【核心属性】的伤害/施加一个状态;2.守御相。恢复你或一个周身中距离友军3格血量/灵气。', logo: 'talent-logo-29.png' },
+      { id: 30, name: '混沌道胎', level: 3, description: '先天百脉驳杂，诸般属性灵根在体内相冲相生，化作混沌本源。虽令修行多舛，亦藏寰宇未辟之力。每经历一次长休，你可以选择一个其他道源的道源之法来使用。', logo: 'talent-logo-30.png' },
      
       // 仙级天赋
-      { id: 31, name: '斩仙残刃', level: 4, description: '你获得一件威力绝伦的杀戮至宝（残品）斩仙剑（将其放置于你的法宝栏），每次使用都需要消消耗大量灵气及一个完整动作，需要进行一次判定，失败会反噬！法宝无法直接造成伤害，但可斩去对方一个特征！（如坚硬的甲壳）' },
-      { id: 32, name: '先天道体', level: 4, description: '身合混沌初开之象，诸般道韵皆可纳为己用。你可以学习其他道源的神通与秘法且灵气格上限+2。' },
-      { id: 33, name: '春秋必成', level: 4, description: '每次团开始一次。你可以消耗一点福缘点在天道允许范围内改变今天发生过一件事情,投掷一枚D6来决定改变的结果,结果为3-6时改变成功;结果为6时成功且能给你现在的行动带来一定的优势;结果为1、2时失败且会反噬你,给你现在的行动增加阻碍。' },
-      { id: 34, name: '修仙系统', level: 4, description: '你觉醒了修仙系统，每次游戏的开始时，你可以选择两个非核心属性获得+2。每次长休的时候可以重新分配。' }
+      { id: 31, name: '斩仙残刃', level: 4, description: '你获得一件威力绝伦的杀戮至宝（残品）斩仙剑（将其放置于你的法宝栏），每次使用都需要消消耗大量灵气及一个完整动作，需要进行一次判定，失败会反噬！法宝无法直接造成伤害，但可斩去对方一个特征！（如坚硬的甲壳）', logo: 'talent-logo-31.png' },
+      { id: 32, name: '先天道体', level: 4, description: '身合混沌初开之象，诸般道韵皆可纳为己用。你可以学习其他道源的神通与秘法且灵气格上限+2。', logo: 'talent-logo-32.png' },
+      { id: 33, name: '春秋必成', level: 4, description: '每次团开始一次。你可以消耗一点福缘点在天道允许范围内改变今天发生过一件事情,投掷一枚D6来决定改变的结果,结果为3-6时改变成功;结果为6时成功且能给你现在的行动带来一定的优势;结果为1、2时失败且会反噬你,给你现在的行动增加阻碍。', logo: 'talent-logo-33.png' },
+      { id: 34, name: '修仙系统', level: 4, description: '你觉醒了修仙系统，每次游戏的开始时，你可以选择两个非核心属性获得+2。每次长休的时候可以重新分配。', logo: 'talent-logo-34.png' }
     ];
     
     // 天谴数据
     const curses = [
       // 凡级天谴
-      { id: 1, name: '漏财之相', level: 0, description: '命宫犯破财煞，灵石入手如流沙过指。每次团开始时，你都会扣除少量灵石。' },
-      { id: 2, name: '讷言封唇', level: 0, description: '性朴拙而少机锋，辞出如石坠寒潭。你与陌生人的交涉中检定-1。' },
-      { id: 3, name: '晦云罩面', level: 0, description: '神光内敛，气机驳杂，初遇之人常觉灵台微窒，莫名生疏离戒备之心。' },
-      { id: 4, name: '先天痼疾', level: 0, description: '根基本有瑕，气脉孱弱如残烛。当涉及疾病与中毒等需要仙躯检定时，检定值-1。' },
-      { id: 5, name: '胸无点墨', level: 0, description: '性厌经纶，视文章典册如腐土。在跟文化造诣有关的检定中检定值-1。' },
-      { id: 6, name: '魂瘴难消', level: 0, description: '昔时遭劫，神魂深处留一缕阴蚀裂痕。精神受到打击和创伤，神魂有关奇术检定值-1。' },
-      { id: 7, name: '惨遭退婚', level: 0, description: '昔年一纸退婚书，化作心间缠魂茧。身处有异性之地时，旧痕隐隐牵动道心，诸般作为皆滞一分气机，所有判定减一。' },
+      { id: 1, name: '漏财之相', level: 0, description: '命宫犯破财煞，灵石入手如流沙过指。每次团开始时，你都会扣除少量灵石。', logo: 'curse-logo-1.png' },
+      { id: 2, name: '讷言封唇', level: 0, description: '性朴拙而少机锋，辞出如石坠寒潭。你与陌生人的交涉中检定-1。', logo: 'curse-logo-2.png' },
+      { id: 3, name: '晦云罩面', level: 0, description: '神光内敛，气机驳杂，初遇之人常觉灵台微窒，莫名生疏离戒备之心。', logo: 'curse-logo-3.png' },
+      { id: 4, name: '先天痼疾', level: 0, description: '根基本有瑕，气脉孱弱如残烛。当涉及疾病与中毒等需要仙躯检定时，检定值-1。', logo: 'curse-logo-4.png' },
+      { id: 5, name: '胸无点墨', level: 0, description: '性厌经纶，视文章典册如腐土。在跟文化造诣有关的检定中检定值-1。', logo: 'curse-logo-5.png' },
+      { id: 6, name: '魂瘴难消', level: 0, description: '昔时遭劫，神魂深处留一缕阴蚀裂痕。精神受到打击和创伤，神魂有关奇术检定值-1。', logo: 'curse-logo-6.png' },
+      { id: 7, name: '惨遭退婚', level: 0, description: '昔年一纸退婚书，化作心间缠魂茧。身处有异性之地时，旧痕隐隐牵动道心，诸般作为皆滞一分气机，所有判定减一。', logo: 'curse-logo-7.png' },
       
       // 人级天谴
-      { id: 8, name: '命星晦暗', level: 1, description: '运数天生驳杂，每逢新劫初启时，总有一缕缘法如流沙逝去，福缘点数自发减一。' },
-      { id: 9, name: '兵煞缠身', level: 1, description: '命宫犯“孤辰煞”，天生与器灵相斥。每逢御使法宝，必先耗额外灵气镇压自身兵煞之气，方能勉强驱策，故而每用一次，灵气多耗一格。（需要描述为什么！）' },
-      { id: 10, name: '眠蚕夺神', level: 1, description: '三魂中“爽灵”先天萎靡，神思常困于昏沉大渊。短憩长眠时恢复的福缘点-1。' },
-      { id: 11, name: '惊魄未定', level: 1, description: '每逢杀机骤临，心脉易乱如沸水，需耗额外心力镇摄神魂，调息时少回复两格灵气。' },
-      { id: 12, name: '道基残痕', level: 1, description: '你不知何时损伤了你的道体，你使用道源之法时骰D6，如果是3以及以上，则此次道源之法失效，描述因为什么情况导致的！' },
+      { id: 8, name: '命星晦暗', level: 1, description: '运数天生驳杂，每逢新劫初启时，总有一缕缘法如流沙逝去，福缘点数自发减一。', logo: 'curse-logo-8.png' },
+      { id: 9, name: '兵煞缠身', level: 1, description: '命宫犯“孤辰煞”，天生与器灵相斥。每逢御使法宝，必先耗额外灵气镇压自身兵煞之气，方能勉强驱策，故而每用一次，灵气多耗一格。（需要描述为什么！）', logo: 'curse-logo-9.png' },
+      { id: 10, name: '眠蚕夺神', level: 1, description: '三魂中“爽灵”先天萎靡，神思常困于昏沉大渊。短憩长眠时恢复的福缘点-1。', logo: 'curse-logo-10.png' },
+      { id: 11, name: '惊魄未定', level: 1, description: '每逢杀机骤临，心脉易乱如沸水，需耗额外心力镇摄神魂，调息时少回复两格灵气。', logo: 'curse-logo-11.png' },
+      { id: 12, name: '道基残痕', level: 1, description: '你不知何时损伤了你的道体，你使用道源之法时骰D6，如果是3以及以上，则此次道源之法失效，描述因为什么情况导致的！', logo: 'curse-logo-12.png' },
     
       // 地级天谴
-      { id: 13, name: '气脉缠结', level: 2, description: '因早年行气差错，灵脉中生出数处郁结之节。周天运转常在此受阻，故气海容量较同境者窄隘一分，灵气上限减一格。' },
-      { id: 14, name: '百畜避煞', level: 2, description: '身带一缕上古“狩煞”余息，兽类嗅之则毛羽倒竖、血脉惊惶，视如天敌现世，纵是温驯灵兽亦会莫名显露敌意。' },
-      { id: 15, name: '太上忘情', level: 2, description: '道途执于“斩情”一诀，却未悟“忘情非枯槁”。如今七情如冻泉滞流，见悲喜无波，遇因缘不扰，只余漠然履约之念。你对任何人任何事都提不起兴趣，无法与他人共情，只是单纯的完成任务。' },
-      { id: 16, name: '不愈道伤', level: 2, description: '昔年受创时被侵染伤口，致气血本源永久缺损一角。纵灵药仙术亦难补此痕，血量格上限减一格。' },
+      { id: 13, name: '气脉缠结', level: 2, description: '因早年行气差错，灵脉中生出数处郁结之节。周天运转常在此受阻，故气海容量较同境者窄隘一分，灵气上限减一格。', logo: 'curse-logo-13.png' },
+      { id: 14, name: '百畜避煞', level: 2, description: '身带一缕上古“狩煞”余息，兽类嗅之则毛羽倒竖、血脉惊惶，视如天敌现世，纵是温驯灵兽亦会莫名显露敌意。', logo: 'curse-logo-14.png' },
+      { id: 15, name: '太上忘情', level: 2, description: '道途执于“斩情”一诀，却未悟“忘情非枯槁”。如今七情如冻泉滞流，见悲喜无波，遇因缘不扰，只余漠然履约之念。你对任何人任何事都提不起兴趣，无法与他人共情，只是单纯的完成任务。', logo: 'curse-logo-15.png' },
+      { id: 16, name: '不愈道伤', level: 2, description: '昔年受创时被侵染伤口，致气血本源永久缺损一角。纵灵药仙术亦难补此痕，血量格上限减一格。', logo: 'curse-logo-16.png' },
    
       // 天级天谴
-      { id: 17, name: '业魂随影', level: 3, description: '一位因你（或你的前世、血脉）而间接死去的无辜者的微弱残魂跟随着你，主持人可以用历练点或在剧情上合理时，让其影响你的判定，让你的某个骰子翻到另外一面。' },
-      { id: 18, name: '灾星', level: 3, description: '每次短休时，你额外给主持人补充1个历练点，而长休时补充两个，描述一下你的不祥预感！' },
-      { id: 19, name: '天外之魔', level: 3, description: '身为魂穿者，你的魂魄与此界天道始终隔着一层无形障壁并未完全弥合。裂隙彼端有一尊【天外之魔】受汝魂光牵引，破界而来。此魔无形无定，或化心魔低语，或显形为扭曲孽物，其威能随你道行增长而攀升（约等同你当前境界的“死战”级强敌）。它将如影随形，在你求道之途的关键处降下阻道之劫。' },
-      { id: 20, name: '缺一之境', level: 3, description: '对于功法神通的领悟总是到九成九，如观月见盈而欠一线，听潮闻声而漏一韵。只差一分无法完全掌握。你的天人合一值+1且无法降低。' },
+      { id: 17, name: '业魂随影', level: 3, description: '一位因你（或你的前世、血脉）而间接死去的无辜者的微弱残魂跟随着你，主持人可以用历练点或在剧情上合理时，让其影响你的判定，让你的某个骰子翻到另外一面。', logo: 'curse-logo-17.png' },
+      { id: 18, name: '灾星', level: 3, description: '每次短休时，你额外给主持人补充1个历练点，而长休时补充两个，描述一下你的不祥预感！', logo: 'curse-logo-18.png' },
+      { id: 19, name: '天外之魔', level: 3, description: '身为魂穿者，你的魂魄与此界天道始终隔着一层无形障壁并未完全弥合。裂隙彼端有一尊【天外之魔】受汝魂光牵引，破界而来。此魔无形无定，或化心魔低语，或显形为扭曲孽物，其威能随你道行增长而攀升（约等同你当前境界的“死战”级强敌）。它将如影随形，在你求道之途的关键处降下阻道之劫。', logo: 'curse-logo-19.png' },
+      { id: 20, name: '缺一之境', level: 3, description: '对于功法神通的领悟总是到九成九，如观月见盈而欠一线，听潮闻声而漏一韵。只差一分无法完全掌握。你的天人合一值+1且无法降低。', logo: 'curse-logo-20.png' },
       
       // 仙级天谴
-      { id: 21, name: '道痕互斥', level: 4, description: '你的大道之基上有一道无法愈合的裂痕，你使用道源之法需骰d6，如果不为6则无法使用。' },
-      { id: 22, name: '虚空道标', level: 4, description: '你的灵魂在无尽虚空中，如同一个明亮的道标，主持人拥有的“历练点”可用于在任意时间，向你的位置“投放”一个来自天外、异次元或深渊的、充满恶意的“访客”或“窥探”。它们可能直接攻击，可能扭曲周围环境，也可能只是静静地观察，带来最深沉的恐怖。' },
-      { id: 23, name: '黑棺死运', level: 4, description: '你的气运宛如一口黑色的棺材笼罩在身上，每次游戏，你会有三次检定具有劣势！（由主持人决定何时启动）游戏开始时给主持人额外补充两个历练点。' },
-      { id: 24, name: '至珍宝体', level: 4, description: '你的体质特殊是极佳的炼丹材料，有无数大能和妖兽觊觎着，你在城中或野外时可能会遇到各种势力的追捕。你到达一个新的城镇一定时间后，主持人会获得2个历练点。' },
-      { id: 25, name: '不稳定能量', level: 4, description: '你体内的灵气十分的庞大，以至于有些不稳定，冲突中每经过一个轮次，你扣除一格血量。' }
+      { id: 21, name: '道痕互斥', level: 4, description: '你的大道之基上有一道无法愈合的裂痕，你使用道源之法需骰d6，如果不为6则无法使用。', logo: 'curse-logo-21.png' },
+      { id: 22, name: '虚空道标', level: 4, description: '你的灵魂在无尽虚空中，如同一个明亮的道标，主持人拥有的“历练点”可用于在任意时间，向你的位置“投放”一个来自天外、异次元或深渊的、充满恶意的“访客”或“窥探”。它们可能直接攻击，可能扭曲周围环境，也可能只是静静地观察，带来最深沉的恐怖。', logo: 'curse-logo-22.png' },
+      { id: 23, name: '黑棺死运', level: 4, description: '你的气运宛如一口黑色的棺材笼罩在身上，每次游戏，你会有三次检定具有劣势！（由主持人决定何时启动）游戏开始时给主持人额外补充两个历练点。', logo: 'curse-logo-23.png' },
+      { id: 24, name: '至珍宝体', level: 4, description: '你的体质特殊是极佳的炼丹材料，有无数大能和妖兽觊觎着，你在城中或野外时可能会遇到各种势力的追捕。你到达一个新的城镇一定时间后，主持人会获得2个历练点。', logo: 'curse-logo-24.png' },
+      { id: 25, name: '不稳定能量', level: 4, description: '你体内的灵气十分的庞大，以至于有些不稳定，冲突中每经过一个轮次，你扣除一格血量。', logo: 'curse-logo-25.png' }
     ];
     
     // 组合效果数据
+    // 格式：{ talentId: 天赋ID, curseId: 天谴ID, effect: "组合效果描述" } 或 普通效果字符串
     const combinationEffects = [
+      // 特定天赋+天谴组合（用户可自定义填充）
+      { talentId: 1, curseId: 1, effect: "囊藏奇缘，财散如水：你似是天道偏爱的散财童子，每逢历练开启，行囊中总会凭空生出一枚缘法小物，或是解厄的符纸，或是辨药的灵草，恰能解当下之急；可偏生命格漏财，每次出发前总要无故损耗些许灵石，要么是被奸商坑骗，要么是不慎遗失，仿佛冥冥中自有平衡，让你 “得一缘法，散一笔财”，虽不致窘迫，却始终难积余财，只能靠灵囊中的机缘步步前行。" },
+      { talentId: 2, curseId: 5, effect: "巧手造物，墨字难通：你有一双点铁通灵的妙手，捻木可成器，锻铁能通灵，但凡涉及工具制作、百工锻铸之事，道韵随指而生，检定总能顺风顺水；可偏偏对笔墨文章一窍不通，典籍注解、诗词歌赋于你如同天书，涉及文化造诣的检定屡屡碰壁。你是能工巧匠，却也是 “目不识丁” 的修行者。" },
+      { talentId: 10, curseId: 8, effect: "福缘自有，命途多晦：你天生自带福运，遇事常有机缘眷顾；可命星偏偏晦暗无光，仿佛 “福运刚至，霉运便来”。你总能在绝境中逢生，却也总在顺境中遭逢意外；刚得到他人相助，转眼便因误会陷入争执，福祸交织间，倒也练就了你随遇而安的心态。" },
+      { talentId: 11, curseId: 9, effect: "草木知音，兵煞扰宝：你能与花草树木低语，感知它们的喜怒哀乐，这份异能让你在山林历练中屡屡避祸；可你天生兵煞缠身，与法宝八字不合，但凡动用法宝，总要多耗一格灵气。" },
+      { talentId: 21, curseId: 13, effect: "宝甲护身，气脉滞涩：你身负一件保命灵宝，或是能在致命伤时瞬移避险，或是开局便有临时血量加持，总能在生死关头护住性命；可气脉天生缠结，灵气格比常人少一格，灵气运转滞涩不畅。这份桎梏让你不得不精打细算每一格灵气，在保命与续航间艰难平衡。" },
+      { talentId: 23, curseId: 14, effect: "异兽传功，百兽避之：一场奇遇让你得上古异兽传承，或是能问出真相，或是血量增厚，或是身法迅捷；可这份传承却引来了百兽憎恶，所有动物、灵兽见了你都无端生恨，要么四散奔逃，要么主动攻击。你在山林中寸步难行，灵兽见了你转头就跑，想寻个坐骑难如登天，想采撷长在兽群附近的灵药更是要历经死战，仿佛异兽的力量，本就与凡兽格格不入。" },
+      { talentId: 21, curseId: 17, effect: "葫镇阴邪，业魂随身：你手握紫金灵葫，可收纳炼化低级妖物阴魂，是降妖除魔的利器；可偏偏有一缕业魂随你左右，这缕因你（或血脉、前世）而死的无辜者残魂，总在你催动灵葫时干扰。可也正是这缕业魂，让你对阴邪之物更添警惕，偶尔还能借残魂的微弱感应察觉隐藏的妖祟，真是 “镇邪亦引邪，业魂难脱身”。" },
+      { talentId: 26, curseId: 18, effect: "缩地千里，灾星随行：你身怀缩地成寸之能，消耗灵气便能超远距离移动，往来穿梭如履平地；可你本身却是一尊灾星，走到哪都带着不祥预感。你能快速逃离险境，却发现自己逃到哪里，哪里就会生出新的危机，仿佛你的迅捷，只是为了更快地卷入新的灾祸。" },
+      { talentId: 32, curseId: 21, effect: "道体兼容，道痕互斥：你天生先天道体，能修习其他道源的神通秘法，灵气格还比常人多，堪称 “万法皆通” 的奇才；可大道之基上有道痕裂痕，但凡动用道源之法，都难以生效。你通晓多种神通，却常常 “临阵失效”。这份 “能学不能用” 的桎梏，让你不得不广学博采，却也只能寄望于每次施法时的 “鸿运当头”。" },
+      { talentId: 31, curseId: 25, effect: "残刃斩灵，灵韵噬身：你手握斩仙残刃这等杀戮至宝，虽为残品，却能斩去敌人的特征，威力绝伦；可体内灵气庞大却极不稳定，你想用残刃破敌，却要承受灵气噬体之痛。这份 “以血换胜” 的代价，让你每一次动用斩仙残刃，都要在 “破敌” 与 “保命” 间做出生死抉择，堪称逆命修行中最烈的 “双刃剑”。" },
+      { talentId: 9, curseId: 2, effect: "明心见性，讷言封唇：你心态超然，任凭外界毁誉、诳语，皆如清风拂镜，从不动摇；可你偏偏讷言封唇，与陌生人交涉时检定，纵有万千道理，也难以用言语表达。真是 “心明如镜，口拙如木”。" },
+      { talentId: 17, curseId: 3, effect: "玲珑通明，晦云罩面：你八面玲珑，对无恶意之人总能轻易赢得好感，与人相处圆滑通透；可偏偏晦云罩面，初见你的人都会生出不好的印象。你常经历 “初见生恶，久处生欢” 的境遇。这份 “先恶后善” 的相处模式，让你在结识新朋友时屡屡碰壁，却也能筛选出真正愿意了解你的知己，修行路上虽少了初识的顺遂，却多了患难与共的情谊。" },
+      { talentId: 34, curseId: 7, effect: "系统加身，婚劫缠身：你是觉醒了修仙系统的天选之人，实力提升如履平地；可偏偏身负退婚之劫，但凡身处有异性的场所，宛如被一道无形的枷锁束缚。你能靠着系统加持在秘境中斩妖除魔，却在宗门同门的女修面前屡屡失手。这份实力强悍却情场窘迫的境遇，让你一边靠着系统精进修为，一边默默承受着旁人的议论，逆命之路，既要破境，也要破心结。" },
+      { talentId: 5, curseId: 22, effect: "灵枢御术，虚空召祸：你天生灵枢通明，气随念转，无论是御火、控水还是画符，都比常人顺畅数倍，抬手间便能引动周天灵气；可你的灵魂却是虚空道标，在无尽虚空中格外明亮。灵枢通明给了你对抗恶意的底气，虚空道标却让你永无宁日，仿佛你的灵韵越盛，越容易引来虚空之中的觊觎，只能在 “御术破敌” 与 “抵御外敌” 间连轴转。" },
+      { talentId: 10, curseId: 8, effect: "真龙威仪，眠蚕蚀神：你身负真龙之气，周身自带威压，除了顶级阵法与恶劣环境，其余阻碍皆难伤你分毫，修士见了你无不心生敬畏；可偏偏被眠蚕夺神，终日一副睡不醒的模样。你往宗门大殿一站，真龙威压便能让寻衅滋事的修士噤若寒蝉，可下一秒就忍不住打哈欠，威严瞬间消散大半。这份 “威严与嗜睡” 的矛盾，让你唯有在战斗时，才能靠威压暂时压下睡意，尽显霸道。" },
+      { talentId: 14, curseId: 15, effect: "妙辩通神，无情无心：你有一副妙辩天音的好口才，辩经说理无人能及，与人交谈需检定时总能占得优势，说的话莫名让人信服；可你正修太上忘情之道，对世间万物皆无共情之心，做事只为完成任务，从不在乎他人死活。妙辩天音让你轻易撬动人心，太上忘情却让你始终游离于人情之外，别人敬你口才卓绝，却也怕你无情无义，你的话语能救人，也能在无形中伤人。" },
+      { talentId: 18, curseId: 19, effect: "灵犀寻踪，魔影追袭：你习得灵犀指踪之术，可在任意角落留下专属灵力标记，只要身处同一时空，便能感知标记的大致方向，寻人探路从无失手；可你身为魂穿者，异界灵魂未与此方世界完全融合，引来了追杀，且对方实力会随你提升而增强。灵犀指踪给了你寻路之能，天外之魔却让你路路遇劫，你的标记既是指引，也可能成为神谕者追踪你的线索，每一次留痕，都要反复权衡，逆命之路步步惊心。" },
+      { talentId: 27, curseId: 11, effect: "蛊虫回气，惊魄难安：你豢养着一只本命蛊虫，承载你的大道之法，续航能力远超常人；可你天生惊魄未定，每逢冲突便心生紧张。本命蛊虫的回气之力，刚好能弥补调息时的灵气损耗，可那份深入骨髓的紧张感，又让你始终无法尽兴发挥。" },
+      { talentId: 33, curseId: 16, effect: "春秋改命，道伤难愈：你手握 “春秋必成” 的逆天权限，可你身负不愈道伤，肉身的痛楚如影随形。春秋必成给了你 “逆天改命” 的机会，不愈道伤却让你每次改命都要付出皮肉之苦，仿佛天道在告诫你：改写命运，必以自身伤痛为代价。" },
+      { talentId: 7, curseId: 24, effect: "罡躯扛鼎，宝体遭窥：你天生磐骨罡躯，筋如蛟索，骨若精钢，寻常刀剑难伤，就算被重物砸中也浑然不觉；可你的体质却是顶级炼丹材料，无数大能与妖兽对你虎视眈眈。磐骨罡躯让你在正面冲突中无人能敌，至珍宝体却让你终日被追杀缠身。" },
+      { talentId: 12, curseId: 13, effect: "神农识药，气脉滞涩：你承神农血脉，自幼识药辨草，疗伤解毒从无烦忧；可你气脉天生缠结，灵气运转滞涩不畅。神农脉承给了你 “药石渡厄” 的能力，气脉缠结却让你 “灵气难续”，成了 “以药补灵” 的修行者。" },
+      { talentId: 22, curseId: 23, effect: "玄机破幻，黑棺罩运：你身怀玄机秘宝，可择机看破幻象、寻找线索或隐蔽气息，能帮你渡过大劫；可你被黑棺死运笼罩。玄机秘宝是你破局的关键，黑棺死运却让你步步遇险，每一次动用秘宝，都要做好迎接后续反噬的准备，福祸之间，全凭一念抉择。" },
+      { talentId: 3, curseId: 25, effect: "无垢抗劫，灵韵噬身：你天生无垢之体，百病不侵，坠崖落石亦浑然不觉，寻常刀剑、恶疾毒瘴皆难伤你分毫；可体内灵气却庞大得失控，每逢冲突宛如灵韵在啃噬自身经脉。这份 “外无懈可击，内有隐忧” 的体质，让你既要靠无垢之体冲锋陷阵，又要时刻算计血量，在 “硬抗” 与 “止损” 间反复拉扯。" },
+      { talentId: 13, curseId: 1, effect: "慧眼识货，财散难留：你承世代经商的底蕴，通宝灵犀在身，除特殊情况外可无阻碍踏入任何商会与拍卖会，交易时一眼便能看穿商家是否偷工减料、暗藏猫腻，从无买亏上当之事；可偏偏身负漏财之相，就算看穿了商家的伎俩，钱财也像长了脚似的留不住。" },
+      { talentId: 19, curseId: 12, effect: "灵格充盈，道源难施：你修得周天常驻之能，灵气续航远超同辈，无论是持久战还是连续施展术法，都比别人更从容；可道体早有缺损，仿佛灵气再多，也难催动契合的功法。这份 “灵气有余，功法难施” 的窘境，让你不得不放弃专精一道，转而修炼更多基础术法，以量补质。" },
+      { talentId: 29, curseId: 6, effect: "器灵护佑，魂瘴扰神：你天生自带器灵，第一个法宝便是旁人梦寐以求的器灵法宝，战斗中总能抢占先机；可魂瘴难消，精神曾遭重创，极易被神魂干扰术影响。器灵给了你外在的强悍助力，魂瘴却让你内在的神魂脆弱不堪，你能靠法宝护人护己，却护不住自己的心神。" },
+      { talentId: 30, curseId: 15, effect: "混沌融道，无情无念：你身怀混沌道胎，体内多属性碰撞交织，堪称万法皆通的奇才；可你正修太上忘情之道，对世间万物皆无共情，做事只为完成任务，从不在乎他人死活。混沌道胎给了你 “融百家之长” 的能力，太上忘情却让你 “失人间温情”，你的修行之路越宽，身边的人却越少。" },
+      { talentId: 4, curseId: 17, effect: "坐忘尘嚣，业魂缠踪：你心性通透，坐忘尘嚣，万般毁誉、诸相诳语皆过而不留，从不会被言语激怒或蛊惑；可一缕业魂如影随形，干扰你的判定。坐忘尘嚣让你抗得住外界言语攻伐，业魂随影却让你躲不过内在天命干扰，每次成功抵御他人的算计后，都要提防业魂的突然发难，逆命之路，既要抗人，也要抗魂。" },
+      { talentId: 15, curseId: 14, effect: "罗刹慑敌，百兽恶之：你生得罗刹怒相，豹头环眼，威慑力十足，光是眼神就能吓退不少弱敌；可你身负百畜避煞，所有动物、灵兽见了你都无端生恨，要么四散奔逃，要么主动攻击，让你在山林历练中屡屡碰壁。这份反差让你成了 “人形威慑，兽类公敌”，城里历练顺风顺水，山里历练却举步维艰。" },
+      { talentId: 20, curseId: 23, effect: "气海省灵，黑棺罩运：你气海涵虚，丹田能容更多灵气，堪称 “灵气节流”；可你被黑棺死运笼罩，好运从不眷顾。气海涵虚让你 “省灵气、巧破局”，黑棺死运却让你 “遭暗劫、频失利”，每次省下来的灵气，往往都要用来弥补天谴带来的损失，仿佛天道在刻意平衡你的 “精打细算”。" },
+      { talentId: 25, curseId: 10, effect: "青木增寿，眠蚕耗福：你身负青木长生之能，比常人更耐打，恢复能力也更强，就算身受重创也能慢慢撑回来；可你被眠蚕夺神，终日睡不醒，福运总是比别人少一分。青木长生给了你 “硬扛的资本”，眠蚕夺神却让你 “少了福运的加持”，能在绝境中活下来，却在顺境中因缺福缘而留遗憾。" },
+      { talentId: 31, curseId: 4, effect: "斩仙破法，痼疾扰身：你手握斩仙残刃这等杀戮至宝，虽为残品，却能斩去敌人的核心特征，威力震慑四方；可你天生有先天痼疾，看似强悍，却怕阴邪毒瘴。斩仙残刃让你 “能破敌之强”，先天痼疾却让你 “怕敌之弱”，这份 “刚猛有余，阴柔不足” 的桎梏，让你不得不时刻备着解毒丹药，一边靠残刃破敌，一边提防暗中毒害。" },
+      { talentId: 8, curseId: 3, effect: "正气昭昭，晦面难近：你天生一身浩然正气，言语间自带凛然风骨，能轻易打动心存善念的修士；可偏偏晦云罩面，初见你的人总会莫名生出恶感，仿佛你周身萦绕着一层无形的阴霾。这份 “内在正气，外在晦色” 的矛盾，让你不得不靠行动打破初见的隔阂，虽多了几分周折，却也让你的善意更显真诚。" },
+      { talentId: 6, curseId: 6, effect: "魂鼎凝实，瘴气扰神：你生而魂光盈室，三魂凝实、七魄如柱，寻常神魂攻击难以伤你；可魂瘴难消，精神曾遭重创，自身施展神魂类术法时总被瘴气干扰。真是 “守魂易，用魂难”。" },
+      { talentId: 16, curseId: 8, effect: "道心磐石，命途多舛：你心智远超常人，道心检定自带优势，纵使面对心魔蛊惑、大道诱惑，也能坚守本心不偏不倚；可命星晦暗，好运仿佛从不眷顾你。道心坚定让你在 “心性之劫” 中无往不利，命星晦暗却让你在 “运势之劫” 中举步维艰，修行之路既要守得住本心，也要扛得住霉运。" },
+      { talentId: 27, curseId: 20, effect: "蛊虫回气，缺一难成：你豢养的本命蛊虫能让核心功法回气，续航能力远超同辈；可你总陷 “缺一之境”，功法领悟永远差最后一分。真是 “续航有余，圆满不足”。" },
+      { talentId: 32, curseId: 21, effect: "万法皆通，道痕互斥：你天生先天道体，可修习其他道源的神通秘法，堪称 “万法皆通” 的奇才；可大道之基有道痕裂痕，动用道源之法难以生效。先天道体给了你 “广学博采” 的资本，道痕互斥却给了你 “用之难成” 的桎梏，你不得不囤积大量不同道源的功法。" },
+      { talentId: 2, curseId: 24, effect: "巧手造物，宝体遭窥：你有捻木成器、点铁通灵的妙手，能打造出品质极佳的法器、工具；可你的体质是顶级炼丹材料，无数大能、妖兽对你虎视眈眈。造化手让你 “以技立足”，至珍宝体却让你 “以身招祸”，你越是打造出稀世宝物，越是容易暴露自己的特殊体质，只能一边藏起手艺低调行事，一边靠着亲手打造的法器抵御追杀。" },
+      { talentId: 11, curseId: 18, effect: "草木通心，灾星随行：你能与花草树木沟通，感知它们的情绪，轻松察觉附近的血腥、践踏痕迹，山林历练中屡屡避祸；可你是天生灾星，走到哪都带着不祥。草木通心能帮你避开 “明险”，灾星体质却让你 “引暗劫”，仿佛你每躲过一次危机，天道就会降下新的灾祸，只能在草木的指引下，在不断的危机中艰难求生。" },
+      { talentId: 26, curseId: 13, effect: "缩地千里，气脉滞涩：你身怀缩地成寸之能，消耗灵气便可超远距离移动，往来穿梭如履平地；可你气脉缠结，灵气运转滞涩。缩地成寸给了你 “逃出生天” 的希望，气脉缠结却给了你 “灵气不足” 的绝望，每次动用天赋都像在 “赌灵气”，稍有不慎便会陷入绝境。" },
+      { talentId: 33, curseId: 11, effect: "春秋改命，惊魄难安：你手握 “春秋必成” 的逆天权限，可消耗福缘点改变已发生的事，可你天生惊魄未定，冲突中紧张不安。春秋必成让你 “能改天命”，惊魄未定却让你 “难稳心神”，每次改命成功后，你都要面对灵气不足的窘境，仿佛天道在告诫你：“改写命运，需付心神之代价”。" },
+      { talentId: 5, curseId: 17, effect: "灵枢御术，业魂扰判：你天生灵枢通明，运用灵气驱动奇术顺畅无比；可一缕业魂如影随形，干扰判定。灵枢通明让你 “术法精进”，业魂随影却让你 “判定难稳”，你能把术法练到炉火纯青，却防不住业魂的突然发难，每次施展奇术时都要做好 “成功与失败” 的双重准备。" },
+      
       // 凡级组合
       "虽然天赋和天谴都很普通，但这种平衡的状态或许正是修炼的真谛。",
       "平凡中蕴含着伟大，普通的天赋和天谴可能正是你成就大道的基石。",
@@ -742,9 +788,13 @@
             </h5>
             <div class="space-y-3">
               ${groupedTalents[level].map(item => `
-                <div class="p-3 bg-gray-50 rounded border-l-4 border-${levelColor}">
-                  <h6 class="font-bold">${item.name}</h6>
-                  <p class="text-sm mt-1">${item.description}</p>
+                <div class="p-3 bg-gray-50 rounded border-l-4 border-${levelColor} flex items-start">
+                  <div class="mr-3">
+                    <img src="${item.logo || 'placeholder-talent.png'}" alt="${item.name}" class="w-12 h-12 object-contain">
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm">${item.description}</p>
+                  </div>
                 </div>
               `).join('')}
             </div>
@@ -773,9 +823,13 @@
             </h5>
             <div class="space-y-3">
               ${groupedCurses[level].map(item => `
-                <div class="p-3 bg-gray-50 rounded border-l-4 border-${levelColor}">
-                  <h6 class="font-bold">${item.name}</h6>
-                  <p class="text-sm mt-1">${item.description}</p>
+                <div class="p-3 bg-gray-50 rounded border-l-4 border-${levelColor} flex items-start">
+                  <div class="mr-3">
+                    <img src="${item.logo || 'placeholder-curse.png'}" alt="${item.name}" class="w-12 h-12 object-contain">
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm">${item.description}</p>
+                  </div>
                 </div>
               `).join('')}
             </div>
@@ -908,11 +962,15 @@
       const level = levels[talent.level];
       
       talentInfo.innerHTML = `
-        <div class="flex items-center">
-          <span class="level-badge bg-${level.color} mr-2">${level.icon} ${level.name}级</span>
-          <h4 class="text-xl font-bold">${talent.name}</h4>
+        <div class="flex flex-col items-center text-center">
+          <div class="mb-3">
+            <img src="${talent.logo || 'placeholder-talent.png'}" alt="${talent.name}" class="w-24 h-24 object-contain">
+          </div>
+          <div class="flex items-center justify-center mb-2">
+            <span class="level-badge bg-${level.color} mr-2">${level.icon} ${level.name}级</span>
+          </div>
+          <p class="mt-2">${talent.description}</p>
         </div>
-        <p class="mt-2">${talent.description}</p>
       `;
     }
     
@@ -921,11 +979,15 @@
       const level = levels[curse.level];
       
       curseInfo.innerHTML = `
-        <div class="flex items-center">
-          <span class="level-badge bg-${level.color} mr-2">${level.icon} ${level.name}级</span>
-          <h4 class="text-xl font-bold">${curse.name}</h4>
+        <div class="flex flex-col items-center text-center">
+          <div class="mb-3">
+            <img src="${curse.logo || 'placeholder-curse.png'}" alt="${curse.name}" class="w-24 h-24 object-contain">
+          </div>
+          <div class="flex items-center justify-center mb-2">
+            <span class="level-badge bg-${level.color} mr-2">${level.icon} ${level.name}级</span>
+          </div>
+          <p class="mt-2">${curse.description}</p>
         </div>
-        <p class="mt-2">${curse.description}</p>
       `;
     }
     
@@ -933,8 +995,7 @@
     function showCombinationEffect() {
       if (!selectedTalent || !selectedCurse) return;
       
-      // 根据天赋和天谴的等级选择组合效果
-      let effectIndex;
+      let effectText;
       const talentLevel = selectedTalent.level;
       const curseLevel = selectedCurse.level;
       
@@ -947,41 +1008,84 @@
       curseCard.classList.remove('talent-dominant', 'curse-dominant', 'balanced-animation');
       combinationCard.classList.remove('talent-dominant', 'curse-dominant', 'balanced-animation');
       
-      if (talentLevel > curseLevel) {
-        // 天赋等级大于天谴等级
-        effectIndex = 16; // "强大的天赋与弱小的天谴，这样的组合让你在修炼之路上占尽优势。"
+      // 检查是否有特定的天赋+天谴组合效果
+      const specificCombination = combinationEffects.find(effect => 
+        typeof effect === 'object' && 
+        effect.talentId === selectedTalent.id && 
+        effect.curseId === selectedCurse.id
+      );
+      
+      if (specificCombination) {
+        // 使用特定组合效果
+        effectText = specificCombination.effect;
         
-        // 添加天赋主导的动画效果
-        talentCard.classList.add('talent-dominant');
-        combinationCard.style.borderColor = '#4CAF50';
-        combinationCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(76, 175, 80, 0.3)';
-        
-      } else if (curseLevel > talentLevel) {
-        // 天谴等级大于天赋等级
-        effectIndex = 17; // "弱小的天赋与强大的天谴，这样的组合让你的修炼之路充满了挑战，但也更加锻炼人的意志。"
-        
-        // 添加天谴主导的动画效果
-        curseCard.classList.add('curse-dominant');
-        combinationCard.style.borderColor = '#F44336';
-        combinationCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(244, 67, 54, 0.3)';
-        
+        // 根据组合类型添加动画效果
+        if (talentLevel > curseLevel) {
+          talentCard.classList.add('talent-dominant');
+          combinationCard.style.borderColor = '#4CAF50';
+          combinationCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(76, 175, 80, 0.3)';
+        } else if (curseLevel > talentLevel) {
+          curseCard.classList.add('curse-dominant');
+          combinationCard.style.borderColor = '#F44336';
+          combinationCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(244, 67, 54, 0.3)';
+        } else {
+          talentCard.classList.add('balanced-animation');
+          curseCard.classList.add('balanced-animation');
+          combinationCard.style.borderColor = '#2196F3';
+          combinationCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(33, 150, 243, 0.3)';
+        }
       } else {
-        // 等级相同的组合
-        const levelStartIndex = talentLevel * 3;
-        const randomOffset = Math.floor(Math.random() * 3);
-        effectIndex = levelStartIndex + randomOffset;
+        // 根据天赋和天谴的等级选择普通组合效果
+        let effectIndex;
         
-        // 添加平衡的动画效果
-        talentCard.classList.add('balanced-animation');
-        curseCard.classList.add('balanced-animation');
-        combinationCard.style.borderColor = '#2196F3';
-        combinationCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(33, 150, 243, 0.3)';
+        if (talentLevel > curseLevel) {
+          // 天赋等级大于天谴等级
+          effectIndex = 16; // "强大的天赋与弱小的天谴，这样的组合让你在修炼之路上占尽优势。"
+          
+          // 添加天赋主导的动画效果
+          talentCard.classList.add('talent-dominant');
+          combinationCard.style.borderColor = '#4CAF50';
+          combinationCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(76, 175, 80, 0.3)';
+          
+        } else if (curseLevel > talentLevel) {
+          // 天谴等级大于天赋等级
+          effectIndex = 17; // "弱小的天赋与强大的天谴，这样的组合让你的修炼之路充满了挑战，但也更加锻炼人的意志。"
+          
+          // 添加天谴主导的动画效果
+          curseCard.classList.add('curse-dominant');
+          combinationCard.style.borderColor = '#F44336';
+          combinationCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(244, 67, 54, 0.3)';
+          
+        } else {
+          // 等级相同的组合
+          const levelStartIndex = talentLevel * 3;
+          const randomOffset = Math.floor(Math.random() * 3);
+          effectIndex = levelStartIndex + randomOffset;
+          
+          // 添加平衡的动画效果
+          talentCard.classList.add('balanced-animation');
+          curseCard.classList.add('balanced-animation');
+          combinationCard.style.borderColor = '#2196F3';
+          combinationCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(33, 150, 243, 0.3)';
+        }
+        
+        // 确保索引在有效范围内
+        effectIndex = Math.min(effectIndex, combinationEffects.length - 1);
+        
+        // 跳过特定组合对象，只取普通效果字符串
+        let normalEffectCount = 0;
+        for (let i = 0; i < combinationEffects.length; i++) {
+          if (typeof combinationEffects[i] === 'string') {
+            if (normalEffectCount === effectIndex) {
+              effectText = combinationEffects[i];
+              break;
+            }
+            normalEffectCount++;
+          }
+        }
       }
       
-      // 确保索引在有效范围内
-      effectIndex = Math.min(effectIndex, combinationEffects.length - 1);
-      
-      combinationEffect.textContent = combinationEffects[effectIndex];
+      combinationEffect.textContent = effectText;
       
       // 移除结果效果
     }
