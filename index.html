@@ -918,9 +918,21 @@
       overlayText.textContent = currentDrawMode === 'talent' ? '正在抽取天赋...' : '正在抽取天谴...';
       overlay.classList.add('active');
       
-      // 随机选择一个项目
+      // 随机选择一个项目，增加特定组合的概率
       const items = currentDrawMode === 'talent' ? talents : curses;
-      const selectedItem = items[Math.floor(Math.random() * items.length)];
+      let selectedItem;
+      
+      // 增加春秋必成（天赋）和黑棺死运（天谴）的概率
+      const hasWeightedItem = currentDrawMode === 'talent' ? 
+        items.find(item => item.id === 33) : // 春秋必成
+        items.find(item => item.id === 23); // 黑棺死运
+      
+      // 10%的概率直接选中特定项目，90%的概率随机选择
+      if (hasWeightedItem && Math.random() < 0.1) {
+        selectedItem = hasWeightedItem;
+      } else {
+        selectedItem = items[Math.floor(Math.random() * items.length)];
+      }
       
       // 计算旋转角度
       const levelAngle = 360 / 5;
